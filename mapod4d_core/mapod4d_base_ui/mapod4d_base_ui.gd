@@ -1,7 +1,7 @@
 # tool
 
 # class_name
-class_name BaseMapod4dUi
+class_name Mapod4dBaseUi
 
 # extends
 extends Control
@@ -16,9 +16,9 @@ extends Control
 
 # ----- signals
 ## request scene whithout progressbar
-signal scene_npb_requested(scene_name: String, fullscreen_flag: bool)
+signal m4d_scene_npb_requested(scene_name: String, fullscreen_flag: bool)
 ## request scene whith progressbar
-signal scene_requested(scene_name: String, fullscreen_flag: bool)
+signal m4d_scene_requested(scene_name: String, fullscreen_flag: bool)
 
 # ----- enums
 
