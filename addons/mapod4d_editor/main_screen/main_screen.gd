@@ -39,6 +39,8 @@ var _tmp_val = 0
 @onready var _metaverse_location = %MetaverseLocation
 @onready var _metaverse_list = %MetaverseList
 @onready var _button_create_metaverse = %CreateMetaverse
+@onready var _button_update_metaverse = %UpdateMetaverse
+@onready var _button_export_metaverse = %ExportMetaverse
 @onready var _input_metaverse_id = %MetaverseId
 @onready var _editor_tab_container = %EditorTabContainer
 @onready var _input_v1 = %V1
@@ -57,10 +59,14 @@ func _ready():
 	_editor_tab_container.set_tab_disabled(2, true)
 	
 	_valid = true
+	## Multiverse section
 	_button_refresh_metaverse_list.pressed.connect(
 			_on_metaverse_list_refresh_pressed)
 	_metaverse_location.item_selected.connect(
 			_on_metaverse_location_selected)
+	_metaverse_list.item_selected.connect(
+		_on_metaverse_selected)
+	##  Metavese section
 	_button_create_metaverse.pressed.connect(
 			_on_metaverse_create_pressed)
 	_input_metaverse_id.text_changed.connect(
@@ -73,13 +79,16 @@ func _ready():
 			_on_input_v3_text_changed)
 	_input_v4.text_changed.connect(
 			_on_input_v4_text_changed)
+	## Test sectione
 	_button_test.pressed.connect(
 			_on_button_test_pressed)
+
+	_metaverse_current_list_refresh()
 
 
 # ----- remaining built-in virtual methods
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+## Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass # Replace with function body.
 
@@ -199,6 +208,10 @@ func _metaverse_list_refresh(location_id):
 		utils_instance.metaverse_list_to_item_list(_metaverse_list)
 
 
+func _metaverse_current_list_refresh():
+	_on_metaverse_list_refresh_pressed()
+
+
 # validation for integer
 func _validate_integer_input(new_text, input_object):
 	const allowed_characters = "[0-9]"
@@ -216,10 +229,29 @@ func _on_metaverse_list_refresh_pressed():
 	var location_id = _metaverse_location.get_selected_id()
 	if location_id >= 0:
 		_metaverse_list_refresh(location_id)
+		_button_update_metaverse.disabled = true
+		_button_export_metaverse.disabled = true
 
 
 func _on_metaverse_location_selected(index):
 	_metaverse_list_refresh(index)
+	_button_update_metaverse.disabled = true
+	_button_export_metaverse.disabled = true
+
+
+func _on_metaverse_selected(index):
+	print("metaverse_selected")
+	var metaverse_info = utils_instance.metaverse_info_read_by_id(
+		_metaverse_list.get_item_text(index))
+	print(metaverse_info)
+	if metaverse_info[0] == true:
+		_input_v1.text = str(metaverse_info[1].v1)
+		_input_v2.text = str(metaverse_info[1].v2)
+		_input_v3.text = str(metaverse_info[1].v3)
+		_input_v4.text = str(metaverse_info[1].v4)
+		_input_metaverse_id.text = metaverse_info[1].name
+		_button_update_metaverse.disabled = false
+		_button_export_metaverse.disabled = false
 
 
 func _on_metaverse_create_pressed():
@@ -228,6 +260,8 @@ func _on_metaverse_create_pressed():
 	var v2 = _input_v2.text
 	var v3 = _input_v3.text
 	var v4 = _input_v4.text
+	_button_update_metaverse.disabled = true
+	_button_export_metaverse.disabled = true
 	if (metaverse_id.length() + 
 			v1.length() + v2.length() + v3.length() + v4.length()) > 0:
 		var location_id = _metaverse_location.get_selected_id()
@@ -243,6 +277,7 @@ func _on_metaverse_create_pressed():
 				rfs.scan()
 			for scene in ret_val.scenes_list:
 				editor_interface.reload_scene_from_path(scene)
+			_metaverse_list_refresh(location_id)
 	else:
 		printerr("Metaverse ID, v1, v2, v3 and v4 connot be empty")
 

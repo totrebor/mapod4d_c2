@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/mapod4d_editor/main_screen/main_screen.gd" id="1_o2kiv"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iv624"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ux8vu"]
 content_margin_left = 5.0
 content_margin_right = 5.0
 bg_color = Color(0.376471, 0.376471, 0.376471, 1)
@@ -12,7 +12,7 @@ border_width_right = 2
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d4750"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yicj4"]
 content_margin_left = 5.0
 content_margin_right = 5.0
 bg_color = Color(0.215686, 0.215686, 0.215686, 1)
@@ -22,7 +22,7 @@ border_width_right = 2
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2wx57"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kfbr2"]
 content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
@@ -37,10 +37,10 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a8xwp"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dyc10"]
 bg_color = Color(0.282353, 0.282353, 0.282353, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t6y11"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oxgtc"]
 content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
@@ -160,9 +160,9 @@ offset_right = 1142.0
 offset_bottom = 638.0
 size_flags_horizontal = 3
 theme_override_constants/side_margin = 8
-theme_override_styles/tab_selected = SubResource("StyleBoxFlat_iv624")
-theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_d4750")
-theme_override_styles/panel = SubResource("StyleBoxFlat_2wx57")
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_ux8vu")
+theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_yicj4")
+theme_override_styles/panel = SubResource("StyleBoxFlat_kfbr2")
 
 [node name="Metaverse" type="VBoxContainer" parent="ScrollContainer/Margin/HBoxContainer/EditorTabContainer"]
 layout_mode = 2
@@ -183,7 +183,7 @@ offset_right = 514.0
 offset_bottom = 26.0
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.627451, 0.74902, 1, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_a8xwp")
+theme_override_styles/normal = SubResource("StyleBoxFlat_dyc10")
 text = "Metavese building"
 vertical_alignment = 1
 
@@ -235,6 +235,8 @@ layout_mode = 2
 offset_left = 24.0
 offset_right = 91.0
 offset_bottom = 31.0
+text = "2"
+editable = false
 
 [node name="Label3" type="Label" parent="ScrollContainer/Margin/HBoxContainer/EditorTabContainer/Metaverse/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
@@ -296,18 +298,22 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Create new Metaverse"
 
-[node name="Button" type="Button" parent="ScrollContainer/Margin/HBoxContainer/EditorTabContainer/Metaverse/HBoxContainer"]
+[node name="UpdateMetaverse" type="Button" parent="ScrollContainer/Margin/HBoxContainer/EditorTabContainer/Metaverse/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 offset_left = 186.0
 offset_right = 337.0
 offset_bottom = 31.0
+disabled = true
 text = "Update Metaverse"
 
-[node name="Button2" type="Button" parent="ScrollContainer/Margin/HBoxContainer/EditorTabContainer/Metaverse/HBoxContainer"]
+[node name="ExportMetaverse" type="Button" parent="ScrollContainer/Margin/HBoxContainer/EditorTabContainer/Metaverse/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 offset_left = 341.0
 offset_right = 486.0
 offset_bottom = 31.0
+disabled = true
 text = "Export Metaverse"
 
 [node name="Planet" type="VBoxContainer" parent="ScrollContainer/Margin/HBoxContainer/EditorTabContainer"]
@@ -330,7 +336,7 @@ offset_bottom = 26.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.627451, 0.74902, 1, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_a8xwp")
+theme_override_styles/normal = SubResource("StyleBoxFlat_dyc10")
 text = "Planet building"
 vertical_alignment = 1
 
@@ -373,4 +379,4 @@ offset_left = 1098.0
 offset_right = 1142.0
 offset_bottom = 638.0
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_t6y11")
+theme_override_styles/panel = SubResource("StyleBoxFlat_oxgtc")

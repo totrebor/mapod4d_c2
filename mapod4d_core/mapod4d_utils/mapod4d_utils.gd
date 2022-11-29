@@ -34,6 +34,10 @@ const TEMPL_METAVERESE = "mapod_4d_templ_metaverse.tscn"
 # ----- private variables
 var _current_location = ""
 var _metaverse_list = []
+var _metaverse_path = ""
+var _metaverse_data = ""
+var _metaverse_assets = ""
+var _metaverse_tamt = ""
 
 # ----- onready variables
 
@@ -49,6 +53,14 @@ func _ready():
 # ----- remaining built-in virtual methods
 
 # ----- public methods
+
+## set default current metaverse path
+func set_current_metaverse_path(metaverse_id):
+	_metaverse_path = _current_location + "/" + metaverse_id
+	_metaverse_data = _metaverse_path + "/" + metaverse_id + ".ma4d"
+	_metaverse_assets = _metaverse_path + "/" + "assets"
+	_metaverse_tamt = _metaverse_path + "/" + "tamt"
+
 
 ## load metaverses list
 func metaverse_list_load(location: MAPOD4D_METAVERSE_LOCATION):
@@ -99,13 +111,10 @@ func metaverse_scaffold(
 		dir = DirAccess.open(_current_location)
 
 	if dir != null:
-		var metaverse_path = _current_location + "/" + metaverse_id
-		var metaverse_data = metaverse_path + "/" + metaverse_id + ".ma4d"
-		var metaverse_assets = metaverse_path + "/" + "assets"
-		var metaverse_tamt = metaverse_path + "/" + "tamt"
-		if dir.dir_exists(metaverse_path) == false:
-			if dir.make_dir(metaverse_path) == OK:
-				var file = FileAccess.open(metaverse_data, FileAccess.WRITE)
+		set_current_metaverse_path(metaverse_id)
+		if dir.dir_exists(_metaverse_path) == false:
+			if dir.make_dir(_metaverse_path) == OK:
+				var file = FileAccess.open(_metaverse_data, FileAccess.WRITE)
 				var metaverse_info = {
 							"name": metaverse_id,
 							"v1":  v1,
@@ -118,19 +127,24 @@ func metaverse_scaffold(
 				var metaverse_info_json = JSON.stringify(metaverse_info)
 				file.store_line(metaverse_info_json)
 				file = null
-			dir.make_dir(metaverse_assets)
-			dir.make_dir(metaverse_tamt)
+			dir.make_dir(_metaverse_assets)
+			dir.make_dir(_metaverse_tamt)
 			var metaverse_name = metaverse_id.substr(0,1).to_upper()
 			metaverse_name += metaverse_id.substr(1)
 			if _save_templ_scene(
 					TEMPL_METAVERESE,
-					metaverse_path + "/" + metaverse_id + ".tscn", 
+					_metaverse_path + "/" + metaverse_id + ".tscn", 
 					metaverse_name):
-				ret_val.scenes_list.push_front(metaverse_path)
+				ret_val.scenes_list.push_front(_metaverse_path)
 			ret_val.response = true
 		else:
 			printerr("Metaverse directory already exists")
 	return ret_val
+
+
+func metaverse_info_read_by_id(metaverse_id):
+	set_current_metaverse_path(metaverse_id)
+	return metaverse_info_read(_metaverse_data)
 
 
 func metaverse_info_read(source_file):
@@ -146,6 +160,10 @@ func metaverse_info_read(source_file):
 			resource.v2 = data_json.v2
 			resource.v3 = data_json.v3
 			resource.v4 = data_json.v4
+			ret_val = true
+	else:
+		print(FileAccess.get_open_error())
+		print(source_file)
 	return [ret_val, resource]
 
 
