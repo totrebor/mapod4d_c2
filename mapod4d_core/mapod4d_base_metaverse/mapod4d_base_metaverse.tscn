@@ -1,12 +1,71 @@
-[gd_scene load_steps=3 format=3 uid="uid://u7n3eafa75ng"]
+[gd_scene load_steps=9 format=3 uid="uid://u7n3eafa75ng"]
 
 [ext_resource type="Script" path="res://mapod4d_core/mapod4d_base_metaverse/mapod4d_base_metaverse.gd" id="1_pufkr"]
-[ext_resource type="Environment" uid="uid://c0ykf7d7gxsnj" path="res://mapod4d_core/mapod4d_base_metaverse/mapod4d_base_metaverse_env.tres" id="2_wbykc"]
+[ext_resource type="Texture2D" uid="uid://63cdiho7f3kb" path="res://assets/img/metaverse.png" id="2_yc12w"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hluec"]
+panorama = ExtResource("2_yc12w")
+
+[sub_resource type="Sky" id="Sky_ed0v6"]
+sky_material = SubResource("PanoramaSkyMaterial_hluec")
+
+[sub_resource type="Environment" id="Environment_0opfj"]
+background_mode = 2
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_ed0v6")
+ambient_light_source = 1
+ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.0
+reflected_light_source = 2
+tonemap_mode = 3
+fog_light_energy = 0.0
+volumetric_fog_density = 0.08
+volumetric_fog_sky_affect = 0.094
+adjustment_enabled = true
+adjustment_brightness = 2.51
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_albuj"]
+albedo_color = Color(0.470588, 0.470588, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qllnu"]
+albedo_color = Color(0.470588, 0.470588, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nt3fh"]
+transparency = 1
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 16.0
 
 [node name="Mapod4dBaseMetaverse" type="Node3D"]
 script = ExtResource("1_pufkr")
 
 [node name="MetaveseEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("2_wbykc")
+environment = SubResource("Environment_0opfj")
 
-[node name="Ground" type="Node3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-4.17059e-08, -0.299424, 0.95412, -1.30882e-08, 0.95412, 0.299424, -1, 0, -4.37114e-08, 10.863, 4.148, -6.489)
+fov = 55.0
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.879683, 0, -4.95748)
+radius = 1.0
+radial_segments = 100
+rings = 100
+material = SubResource("StandardMaterial3D_albuj")
+
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.71065, 0, -8.81132)
+radius = 1.0
+radial_segments = 100
+rings = 100
+material = SubResource("StandardMaterial3D_qllnu")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+light_energy = 0.2
+shadow_enabled = true
+
+[node name="Sun" type="CSGSphere3D" parent="DirectionalLight3D"]
+radius = 0.15
+radial_segments = 100
+rings = 100
+material = SubResource("StandardMaterial3D_nt3fh")

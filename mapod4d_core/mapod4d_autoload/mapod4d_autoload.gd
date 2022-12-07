@@ -17,6 +17,8 @@ extends Node
 # ----- constants
 const MAPOD4D_MAIN_RES = "res://mapod4d_core/mapod4d_main/mapod4d_main.tscn"
 const MAPOD4D_START = "res://mapod4d_core/mapod4d_start/mapod4d_start.tscn"
+const MAPOD4D_ROOT = "/root/Mapod4dMain"
+const MAPOD4D_LOADED_SCENE_NODE_TAG = "LoadedScene"
 
 
 # ----- exported variables
@@ -30,7 +32,7 @@ var _resource_loaded = false
 
 
 # ----- onready variables
-@onready var mapod4d_main = get_node_or_null("/root/Mapod4dMain")
+@onready var mapod4d_main = get_node_or_null(MAPOD4D_ROOT)
 @onready var mapod4d_intro  = true
 
 # ----- optional built-in virtual _init method
@@ -100,19 +102,19 @@ func _loadMain():
 
 
 func _init_progress_bar():
-	mapod4d_main = get_node_or_null("/root/Mapod4dMain")
+	mapod4d_main = get_node_or_null(MAPOD4D_ROOT)
 	if mapod4d_main != null:
 		mapod4d_main.init_progress_bar()
 
 
 func _set_progress_bar(value: float):
-	mapod4d_main = get_node_or_null("/root/Mapod4dMain")
+	mapod4d_main = get_node_or_null(MAPOD4D_ROOT)
 	if mapod4d_main != null:
 		mapod4d_main.set_progress_bar(value)
 
 
 func _end_progress_bar():
-	mapod4d_main = get_node_or_null("/root/Mapod4dMain")
+	mapod4d_main = get_node_or_null(MAPOD4D_ROOT)
 	if mapod4d_main != null:
 		mapod4d_main.end_progress_bar()
 
@@ -121,10 +123,11 @@ func _end_progress_bar():
 ## _current_loaded_scene updated
 func _load_npb_scene(scene):
 	var ret_val = false
-	mapod4d_main = get_node_or_null("/root/Mapod4dMain")
+	mapod4d_main = get_node_or_null(MAPOD4D_ROOT)
 	if mapod4d_main != null:
 		print("mapod4d_main != null")
-		var loaded_scene_placeholder = mapod4d_main.get_node("LoadedScene")
+		var loaded_scene_placeholder = mapod4d_main.get_node(
+				MAPOD4D_LOADED_SCENE_NODE_TAG)
 		if loaded_scene_placeholder.get_child_count() > 0:
 			var children = loaded_scene_placeholder.get_children()
 			for child in children:
@@ -148,9 +151,10 @@ func _load_scene():
 	_loading_scene_res = ""
 	if scene_res != null:
 		var scene_instance = scene_res.instantiate()
-		mapod4d_main = get_node_or_null("/root/Mapod4dMain")
+		mapod4d_main = get_node_or_null(MAPOD4D_ROOT)
 		if mapod4d_main != null:
-			var loaded_scene_placeholder = mapod4d_main.get_node("LoadedScene")
+			var loaded_scene_placeholder = mapod4d_main.get_node(
+					MAPOD4D_LOADED_SCENE_NODE_TAG)
 			if loaded_scene_placeholder.get_child_count() > 0:
 				var children = loaded_scene_placeholder.get_children()
 				for child in children:

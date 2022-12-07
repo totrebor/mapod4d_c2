@@ -26,7 +26,7 @@ extends Control
 @onready var utils = $Utils
 @onready var progress_bar_panel = $Utils/ProgressBar
 @onready var progress_bar = \
-		$Utils/ProgressBar/Panel/VBoxContainer/MarginContainerPB/ProgressBar
+		$Utils/ProgressBar/Panel/VBoxContainer/MarginContainerPB/Bar
 
 # ----- optional built-in virtual _init method
 
