@@ -1,6 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bo0548j4lg06l"]
+[gd_scene load_steps=9 format=3 uid="uid://bo0548j4lg06l"]
 
+[ext_resource type="Script" path="res://mapod4d_core/mapod4d_main_menu/mapod4d_main_menu.gd" id="1_bqpf0"]
 [ext_resource type="Texture2D" uid="uid://r8g7l5l230aa" path="res://assets/img/background.jpg" id="1_w1wsl"]
+[ext_resource type="StyleBox" uid="uid://b5p7v2iyqek23" path="res://mapod4d_core/mapod4d_main_menu/mapod4d_main_menu_bstyle.tres" id="3_3dr1a"]
+[ext_resource type="StyleBox" uid="uid://wavs6csyw4f1" path="res://mapod4d_core/mapod4d_main_menu/mapod4d_main_menu_bstyle_h.tres" id="4_jjox7"]
+[ext_resource type="StyleBox" uid="uid://cxy4lvvcpq2h5" path="res://mapod4d_core/mapod4d_main_menu/mapod4d_main_menu_bstyle_d.tres" id="5_5edkp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rsncy"]
 bg_color = Color(0, 0, 0, 1)
@@ -11,28 +15,6 @@ bg_color = Color(0, 0, 0, 0.811765)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1py6f"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 0.85098)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1dlov"]
-bg_color = Color(0, 0, 0.388235, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-expand_margin_left = 10.0
-expand_margin_top = 10.0
-expand_margin_right = 10.0
-expand_margin_bottom = 10.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rv0kx"]
-bg_color = Color(0.230315, 0.230315, 0.230315, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-expand_margin_left = 10.0
-expand_margin_top = 10.0
-expand_margin_right = 10.0
-expand_margin_bottom = 10.0
-
 [node name="Mapod4dMainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -40,8 +22,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_bqpf0")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -51,9 +35,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_rsncy")
 
 [node name="TextureRect" type="TextureRect" parent="PanelContainer"]
 visible = false
-offset_top = 1.0
-offset_right = 1920.0
-offset_bottom = 1078.0
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("1_w1wsl")
@@ -61,106 +43,95 @@ stretch_mode = 4
 
 [node name="Panel" type="Panel" parent="PanelContainer"]
 visible = false
-offset_right = 1920.0
-offset_bottom = 1080.0
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_crij7")
 
 [node name="Screen" type="VBoxContainer" parent="PanelContainer"]
-offset_right = 1920.0
-offset_bottom = 1080.0
+layout_mode = 2
 theme_override_constants/separation = 29
 metadata/test = &"TEST"
 
 [node name="Header" type="HBoxContainer" parent="PanelContainer/Screen"]
-offset_right = 1920.0
-offset_bottom = 261.0
+layout_mode = 2
 
 [node name="Title" type="MarginContainer" parent="PanelContainer/Screen/Header"]
-offset_right = 1330.0
-offset_bottom = 261.0
+layout_mode = 2
 theme_override_constants/margin_left = 147
 theme_override_constants/margin_top = 37
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Screen/Header/Title"]
 custom_minimum_size = Vector2(499, 0)
-offset_left = 147.0
-offset_top = 37.0
-offset_right = 1330.0
-offset_bottom = 261.0
+layout_mode = 2
 
 [node name="Label" type="Label" parent="PanelContainer/Screen/Header/Title/VBoxContainer"]
-offset_right = 1183.0
-offset_bottom = 150.0
+layout_mode = 2
 theme_override_font_sizes/font_size = 107
 text = "MULTIVERSEMAPOD4D"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="PanelContainer/Screen/Header/Title/VBoxContainer"]
-offset_top = 154.0
-offset_right = 1183.0
-offset_bottom = 224.0
+layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "Motto"
 horizontal_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/Screen"]
-offset_top = 290.0
-offset_right = 1920.0
-offset_bottom = 1080.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 48
 theme_override_constants/margin_bottom = 83
 
 [node name="Body" type="HBoxContainer" parent="PanelContainer/Screen/MarginContainer"]
-offset_left = 48.0
-offset_right = 1920.0
-offset_bottom = 707.0
+layout_mode = 2
 size_flags_vertical = 3
 
 [node name="left" type="VBoxContainer" parent="PanelContainer/Screen/MarginContainer/Body"]
-offset_right = 934.0
-offset_bottom = 707.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="PanelContainer/Screen/MarginContainer/Body/left"]
-offset_right = 934.0
-offset_bottom = 42.0
+layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "LMETAVERSE"
 
-[node name="ItemList" type="ItemList" parent="PanelContainer/Screen/MarginContainer/Body/left"]
-offset_top = 46.0
-offset_right = 934.0
-offset_bottom = 707.0
+[node name="MetaversesList" type="ItemList" parent="PanelContainer/Screen/MarginContainer/Body/left"]
+unique_name_in_owner = true
+layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 29
+theme_override_font_sizes/font_size = 18
 theme_override_styles/panel = SubResource("StyleBoxFlat_1py6f")
-item_count = 1
-item_0/text = "TEST"
 
 [node name="right" type="VBoxContainer" parent="PanelContainer/Screen/MarginContainer/Body"]
-offset_left = 938.0
-offset_right = 1872.0
-offset_bottom = 707.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Screen/MarginContainer/Body/right"]
-offset_right = 934.0
+layout_mode = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/Screen/MarginContainer/Body/right"]
-offset_left = 387.0
-offset_top = 660.0
-offset_right = 546.0
-offset_bottom = 707.0
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10
+theme_override_constants/separation = 40
+
+[node name="EnterIntoMetaverse" type="Button" parent="PanelContainer/Screen/MarginContainer/Body/right/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = ExtResource("3_3dr1a")
+theme_override_styles/hover = ExtResource("4_jjox7")
+theme_override_styles/disabled = ExtResource("5_5edkp")
+disabled = true
+text = "ENTER IN TO METAVERSE"
 
 [node name="MainExit" type="Button" parent="PanelContainer/Screen/MarginContainer/Body/right/VBoxContainer2"]
-offset_right = 159.0
-offset_bottom = 47.0
-size_flags_horizontal = 0
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 34
-theme_override_styles/normal = SubResource("StyleBoxFlat_1dlov")
-theme_override_styles/hover = SubResource("StyleBoxFlat_rv0kx")
+theme_override_styles/normal = ExtResource("3_3dr1a")
+theme_override_styles/hover = ExtResource("4_jjox7")
+theme_override_styles/disabled = ExtResource("5_5edkp")
 text = "MAINEXIT"

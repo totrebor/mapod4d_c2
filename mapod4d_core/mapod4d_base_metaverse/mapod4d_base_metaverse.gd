@@ -21,10 +21,38 @@ extends Node3D
 
 # ----- constants
 
+# ----- exported variables
+
 # ----- public variables
 
 # ----- private variables
 
+# ----- onready variables
+
+
+# ----- optional built-in virtual _init method
+
+# ----- built-in virtual _ready method
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass
+#	var info = load(
+#		_utils.get_metaverse_element_complete_name(
+#			_metaverse_info.location, _metaverse_info.name,
+#			"list_of_planets.tres"
+#		)
+#	)
+#	if info != null:
+#		print(info)
+#	else:
+#		print("INVALID")
+
+# ----- remaining built-in virtual methods
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass # Replace with function body.
 
 # ----- public methods
 

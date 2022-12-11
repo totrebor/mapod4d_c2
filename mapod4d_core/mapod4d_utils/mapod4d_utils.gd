@@ -18,8 +18,9 @@ extends Object
 
 # ----- enums
 enum MAPOD4D_METAVERSE_LOCATION {
-	DEV = 0,
-	LOCAL,
+	M4D_DEV = 0,
+	M4D_LOCAL,
+	M4D_NET,
 }
 
 # ----- constants
@@ -34,10 +35,11 @@ const TEMPL_METAVERESE = "mapod_4d_templ_metaverse.tscn"
 # ----- private variables
 var _current_location = ""
 var _metaverse_list = []
-var _metaverse_path = ""
-var _metaverse_data = ""
-var _metaverse_assets = ""
-var _metaverse_tamt = ""
+var _metaverse_dir = ""
+var _metaverse_scene_path = ""
+var _metaverse_data_path = ""
+var _metaverse_dir_assets = ""
+var _metaverse_dir_tamt = ""
 
 # ----- onready variables
 
@@ -54,19 +56,46 @@ func _ready():
 
 # ----- public methods
 
+func get_multiverse_location(location: MAPOD4D_METAVERSE_LOCATION):
+	var ret_val = "res://mapod4d_multiverse_dev"
+	match location:
+		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_LOCAL:
+			ret_val = "res://mapod4d_multiverse_local"
+		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_DEV:
+			ret_val = "res://mapod4d_multiverse_dev"
+		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_NET:
+			ret_val = "res://mapod4d_multiverse_net"
+	return ret_val
+
+
 ## set default current metaverse path
-func set_current_metaverse_path(metaverse_id):
-	_metaverse_path = _current_location + "/" + metaverse_id
-	_metaverse_data = _metaverse_path + "/" + metaverse_id + ".ma4d"
-	_metaverse_assets = _metaverse_path + "/" + "assets"
-	_metaverse_tamt = _metaverse_path + "/" + "tamt"
+func set_current_metaverse_paths(metaverse_id):
+	_metaverse_dir = _current_location + "/" + metaverse_id
+	_metaverse_scene_path = _metaverse_dir + "/" + metaverse_id + ".tscn"
+	_metaverse_data_path = _metaverse_dir + "/" + metaverse_id + ".ma4d"
+	_metaverse_dir_assets = _metaverse_dir + "/" + "assets"
+	_metaverse_dir_tamt = _metaverse_dir + "/" + "tamt"
 
 
-## load metaverses list
+func get_metaverse_scene_path(
+		location: MAPOD4D_METAVERSE_LOCATION, metaverse_id: String):
+	_current_location = get_multiverse_location(location)
+	set_current_metaverse_paths(metaverse_id)
+	return _metaverse_scene_path
+
+func get_metaverse_element_path(
+		location: MAPOD4D_METAVERSE_LOCATION,
+		metaverse_id: String, element_name: String):
+	set_current_metaverse_paths(metaverse_id)
+	var ret_val = _metaverse_dir + "/" + element_name
+	return ret_val
+
+
+## build and load metaverses list
 func metaverse_list_load(location: MAPOD4D_METAVERSE_LOCATION):
 	var dir = null
-	if _choose_metaverse_location(location) == true:
-		dir = DirAccess.open(_current_location)
+	_choose_multiverse_location(location)
+	dir = DirAccess.open(_current_location)
 
 	if dir != null:
 		var list_dir = dir.get_directories()
@@ -98,6 +127,7 @@ func metaverse_list_clear():
 	_metaverse_list.clear()
 
 
+## build scaffold structure for metaverse
 func metaverse_scaffold(
 		location: MAPOD4D_METAVERSE_LOCATION,
 		metaverse_id: String,
@@ -107,35 +137,35 @@ func metaverse_scaffold(
 		"scenes_list": []
 	}
 	var dir = null
-	if _choose_metaverse_location(location) == true:
-		dir = DirAccess.open(_current_location)
+	_choose_multiverse_location(location)
+	dir = DirAccess.open(_current_location)
 
 	if dir != null:
-		set_current_metaverse_path(metaverse_id)
-		if dir.dir_exists(_metaverse_path) == false:
-			if dir.make_dir(_metaverse_path) == OK:
-				var file = FileAccess.open(_metaverse_data, FileAccess.WRITE)
+		set_current_metaverse_paths(metaverse_id)
+		if dir.dir_exists(_metaverse_dir) == false:
+			if dir.make_dir(_metaverse_dir) == OK:
+				var file = FileAccess.open(
+						_metaverse_data_path, FileAccess.WRITE)
 				var metaverse_info = {
-							"name": metaverse_id,
-							"v1":  v1,
-							"v2":  v2,
-							"v3":  v3,
-							"v4":  v4,
+							"id": metaverse_id,
+							"v1": v1,
+							"v2": v2,
+							"v3": v3,
+							"v4": v4,
 						}
 				print(metaverse_info)
-				metaverse_info.name = str(metaverse_id)
 				var metaverse_info_json = JSON.stringify(metaverse_info)
 				file.store_line(metaverse_info_json)
 				file = null
-			dir.make_dir(_metaverse_assets)
-			dir.make_dir(_metaverse_tamt)
+			dir.make_dir(_metaverse_dir_assets)
+			dir.make_dir(_metaverse_dir_tamt)
 			var metaverse_name = metaverse_id.substr(0,1).to_upper()
 			metaverse_name += metaverse_id.substr(1)
 			if _save_templ_scene(
 					TEMPL_METAVERESE,
-					_metaverse_path + "/" + metaverse_id + ".tscn", 
+					_metaverse_dir + "/" + metaverse_id + ".tscn", 
 					metaverse_name):
-				ret_val.scenes_list.push_front(_metaverse_path)
+				ret_val.scenes_list.push_front(_metaverse_dir)
 			ret_val.response = true
 		else:
 			printerr("Metaverse directory already exists")
@@ -143,8 +173,8 @@ func metaverse_scaffold(
 
 
 func metaverse_info_read_by_id(metaverse_id):
-	set_current_metaverse_path(metaverse_id)
-	return metaverse_info_read(_metaverse_data)
+	set_current_metaverse_paths(metaverse_id)
+	return metaverse_info_read(_metaverse_data_path)
 
 
 func metaverse_info_read(source_file):
@@ -155,7 +185,7 @@ func metaverse_info_read(source_file):
 		var data = file.get_line()
 		var data_json = JSON.parse_string(data)
 		if data_json != null:
-			resource.name = str(data_json.name)
+			resource.id = data_json.id
 			resource.v1 = data_json.v1
 			resource.v2 = data_json.v2
 			resource.v3 = data_json.v3
@@ -164,29 +194,52 @@ func metaverse_info_read(source_file):
 	else:
 		print(FileAccess.get_open_error())
 		print(source_file)
-	return [ret_val, resource]
+	return {
+		"ret_val": ret_val,
+		"resource": resource
+	}
 
 
+## build scaffold structure for planet
 func planet_scaffold(
-		location: MAPOD4D_METAVERSE_LOCATION,
-		metaverse_id: String,
-		planet_id,
-		planet_type: Mapod4dPlanet.MAPOD4D_PLANET_TYPE):
+		_location: MAPOD4D_METAVERSE_LOCATION,
+		_metaverse_id: String,
+		_planet_id,
+		_planet_type: Mapod4dPlanet.MAPOD4D_PLANET_TYPE):
 	pass
+
+
+## read all desktop metaverse for main menu itemlist
+func metaverse_main_menu_list_read(destination: ItemList):
+	var ret_val = false
+	var metaverse_info
+	var metaverse_string
+	_metaverse_list.clear()
+	metaverse_list_load(MAPOD4D_METAVERSE_LOCATION.M4D_DEV)
+	for element in _metaverse_list:
+		metaverse_string = "D " + element
+		metaverse_info =  metaverse_info_read_by_id(element)
+		if metaverse_info.ret_val == true:
+			metaverse_string += " V " + str(metaverse_info.resource.v1)
+			metaverse_string += "." + str(metaverse_info.resource.v2)
+			metaverse_string += "." + str(metaverse_info.resource.v3)
+			metaverse_string += "." + str(metaverse_info.resource.v4)
+		var index = destination.add_item(metaverse_string)
+		metaverse_info = {
+			"location": MAPOD4D_METAVERSE_LOCATION.M4D_DEV,
+			"id": element,
+			"v1": metaverse_info.resource.v1,
+			"v2": metaverse_info.resource.v2,
+			"v3": metaverse_info.resource.v3,
+			"v4": metaverse_info.resource.v4,
+		}
+		destination.set_item_metadata(index, metaverse_info)
 
 # ----- private methods
 
-func _choose_metaverse_location(location: MAPOD4D_METAVERSE_LOCATION):
+func _choose_multiverse_location(location: MAPOD4D_METAVERSE_LOCATION):
 	var ret_val = true
-	_current_location = ""
-	match location:
-		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.LOCAL:
-			_current_location = "res://mapod4d_multiverse_local"
-		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.DEV:
-			_current_location = "res://mapod4d_multiverse_dev"
-		_:
-			printerr("invalid metaverse location")
-			ret_val = false
+	_current_location = get_multiverse_location(location)
 	return ret_val
 
 
@@ -220,7 +273,7 @@ func _save_templ_scene(
 
 
 ## check json file
-func _json_check(file):
+func _json_check(_file):
 	return true
 #	const RVER = "(?<digit0>[0-9]+)\\.(?<digit1>[0-9]+)\\.(?<digit2>[0-9]+)\\.(?<digit3>[0-9]+)"
 #	var regex = RegEx.new()

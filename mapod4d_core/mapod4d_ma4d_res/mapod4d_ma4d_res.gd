@@ -4,7 +4,7 @@ class_name Mapod4dMa4dRes
 # extends
 extends Resource
 
-@export var name: String
+@export var id: String
 @export var v1: int
 @export var v2: int
 @export var v3: int

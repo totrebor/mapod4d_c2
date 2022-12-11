@@ -199,10 +199,10 @@ func _metaverse_list_refresh(location_id):
 		match location:
 			"dev":
 				utils_instance.metaverse_list_load(
-						Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.DEV)
+						Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_DEV)
 			"local":
 				utils_instance.metaverse_list_load(
-						Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.LOCAL)
+						Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_LOCAL)
 			_:
 				pass
 		utils_instance.metaverse_list_to_item_list(_metaverse_list)
@@ -244,12 +244,12 @@ func _on_metaverse_selected(index):
 	var metaverse_info = utils_instance.metaverse_info_read_by_id(
 		_metaverse_list.get_item_text(index))
 	print(metaverse_info)
-	if metaverse_info[0] == true:
-		_input_v1.text = str(metaverse_info[1].v1)
-		_input_v2.text = str(metaverse_info[1].v2)
-		_input_v3.text = str(metaverse_info[1].v3)
-		_input_v4.text = str(metaverse_info[1].v4)
-		_input_metaverse_id.text = metaverse_info[1].name
+	if metaverse_info.ret_val == true:
+		_input_v1.text = str(metaverse_info.resource.v1)
+		_input_v2.text = str(metaverse_info.resource.v2)
+		_input_v3.text = str(metaverse_info.resource.v3)
+		_input_v4.text = str(metaverse_info.resource.v4)
+		_input_metaverse_id.text = metaverse_info.resource.id
 		_button_update_metaverse.disabled = false
 		_button_export_metaverse.disabled = false
 

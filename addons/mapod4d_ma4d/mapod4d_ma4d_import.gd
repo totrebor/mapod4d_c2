@@ -64,13 +64,19 @@ func _import(source_file, save_path, options, r_platform_variants, r_gen_files):
 	var ret_val = false
 	var utils = Mapod4dUtils.new()
 	var metaverse_info = utils.metaverse_info_read(source_file)
-	if metaverse_info[0] == true:
+	if metaverse_info.ret_val == true:
+		print("IMPORT OK")
 		ret_val = ResourceSaver.save(
-			metaverse_info[1], "%s.%s" % [save_path, _get_save_extension()])
+			metaverse_info.resource, 
+			"%s.%s" % [save_path, _get_save_extension()]
+		)
 	else:
+		print("IMPORT ERROR")
 		var resource = Mapod4dMa4dRes.new()
 		ret_val = ResourceSaver.save(
-			metaverse_info[1], "%s.%s" % [save_path, _get_save_extension()])
+			metaverse_info.resource,
+			"%s.%s" % [save_path, _get_save_extension()]
+		)
 #	var resource = BaseMeMapod4dRes.new()
 #	var file = FileAccess.open(source_file, FileAccess.READ)
 #	if file != null:

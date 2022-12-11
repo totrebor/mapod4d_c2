@@ -20,6 +20,11 @@ _global_script_classes=[{
 "path": "res://mapod4d_core/mapod4d_base_ui/mapod4d_base_ui.gd"
 }, {
 "base": "Resource",
+"class": &"Mapod4dListOfPlanetsRes",
+"language": &"GDScript",
+"path": "res://mapod4d_core/mapod4d_base_metaverse/mapod4d_list_of_planets.gd"
+}, {
+"base": "Resource",
 "class": &"Mapod4dMa4dRes",
 "language": &"GDScript",
 "path": "res://mapod4d_core/mapod4d_ma4d_res/mapod4d_ma4d_res.gd"
@@ -34,6 +39,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://mapod4d_core/mapod4d_planet/mapod4d_planet.gd"
 }, {
+"base": "Resource",
+"class": &"Mapod4dPlanetRes",
+"language": &"GDScript",
+"path": "res://mapod4d_core/mapod4d_planet/mapod4d_planet_res.gd"
+}, {
 "base": "Node3D",
 "class": &"Mapod4dSpherePlanet",
 "language": &"GDScript",
@@ -47,9 +57,11 @@ _global_script_classes=[{
 _global_script_class_icons={
 "Mapod4dBaseMetaverse": "",
 "Mapod4dBaseUi": "",
+"Mapod4dListOfPlanetsRes": "",
 "Mapod4dMa4dRes": "",
 "Mapod4dMain": "",
 "Mapod4dPlanet": "",
+"Mapod4dPlanetRes": "",
 "Mapod4dSpherePlanet": "",
 "Mapod4dUtils": ""
 }

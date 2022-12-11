@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" path="res://mapod4d_core/mapod4d_main/mapod4d_main.gd" id="1_2b2ub"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_55wp0"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1hb1y"]
 bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5egbm"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_365lp"]
 bg_color = Color(0.254902, 0.254902, 0.254902, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wfptq"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b7t4p"]
 bg_color = Color(0.94902, 0.94902, 0.94902, 1)
 
 [node name="Mapod4dMain" type="Control"]
@@ -40,7 +40,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_55wp0")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1hb1y")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Utils/ProgressBar/Panel"]
 layout_mode = 1
@@ -52,16 +52,11 @@ grow_vertical = 2
 
 [node name="MarginContainerLabel" type="MarginContainer" parent="Utils/ProgressBar/Panel/VBoxContainer"]
 layout_mode = 2
-offset_right = 1920.0
-offset_bottom = 538.0
 size_flags_vertical = 3
 theme_override_constants/margin_top = 235
 
 [node name="Label" type="Label" parent="Utils/ProgressBar/Panel/VBoxContainer/MarginContainerLabel"]
 layout_mode = 2
-offset_top = 235.0
-offset_right = 1920.0
-offset_bottom = 538.0
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 24
 text = "PBLOADING"
@@ -70,20 +65,14 @@ vertical_alignment = 1
 
 [node name="MarginContainerPB" type="MarginContainer" parent="Utils/ProgressBar/Panel/VBoxContainer"]
 layout_mode = 2
-offset_top = 542.0
-offset_right = 1920.0
-offset_bottom = 1080.0
 size_flags_vertical = 3
 theme_override_constants/margin_left = 185
 theme_override_constants/margin_right = 185
 
 [node name="Bar" type="ProgressBar" parent="Utils/ProgressBar/Panel/VBoxContainer/MarginContainerPB"]
 layout_mode = 2
-offset_left = 185.0
-offset_right = 1735.0
-offset_bottom = 23.0
-theme_override_styles/background = SubResource("StyleBoxFlat_5egbm")
-theme_override_styles/fill = SubResource("StyleBoxFlat_wfptq")
+theme_override_styles/background = SubResource("StyleBoxFlat_365lp")
+theme_override_styles/fill = SubResource("StyleBoxFlat_b7t4p")
 step = 1.0
 
 [node name="LoadedScene" type="Node" parent="."]
