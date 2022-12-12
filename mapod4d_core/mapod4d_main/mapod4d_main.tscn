@@ -2,12 +2,24 @@
 
 [ext_resource type="Script" path="res://mapod4d_core/mapod4d_main/mapod4d_main.gd" id="1_2b2ub"]
 
+<<<<<<< HEAD
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hf12o"]
 bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4kwa7"]
 bg_color = Color(0.254902, 0.254902, 0.254902, 1)
 
+=======
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1hb1y"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_365lp"]
+bg_color = Color(0.254902, 0.254902, 0.254902, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b7t4p"]
+bg_color = Color(0.94902, 0.94902, 0.94902, 1)
+
+>>>>>>> parent of fe2b88d (new scene load in mapod4d_autoload)
 [node name="Mapod4dMain" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -37,7 +49,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+<<<<<<< HEAD
 theme_override_styles/panel = SubResource("StyleBoxFlat_hf12o")
+=======
+theme_override_styles/panel = SubResource("StyleBoxFlat_1hb1y")
+>>>>>>> parent of fe2b88d (new scene load in mapod4d_autoload)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Utils/ProgressBar/Panel"]
 layout_mode = 1
@@ -68,8 +84,13 @@ theme_override_constants/margin_right = 185
 
 [node name="Bar" type="ProgressBar" parent="Utils/ProgressBar/Panel/VBoxContainer/MarginContainerPB"]
 layout_mode = 2
+<<<<<<< HEAD
 theme_override_styles/background = SubResource("StyleBoxFlat_4kwa7")
 theme_override_styles/fill = SubResource("StyleBoxFlat_4kwa7")
+=======
+theme_override_styles/background = SubResource("StyleBoxFlat_365lp")
+theme_override_styles/fill = SubResource("StyleBoxFlat_b7t4p")
+>>>>>>> parent of fe2b88d (new scene load in mapod4d_autoload)
 step = 1.0
 
 [node name="LoadedScene" type="Node" parent="."]

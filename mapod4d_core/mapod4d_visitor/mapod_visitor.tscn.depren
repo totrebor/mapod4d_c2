@@ -1,7 +1,0 @@
-[gd_scene load_steps=13 format=3]
-
-[ext_resource type="Script" path="res://world/mapod_visitor/mapod_visitor.gd" id="1_0cmub"]
-[ext_resource type="Material" uid="uid://b4qm17ggfr5ob" path="res://mapod4d_core/mapod4d_visitor/materials/mapod_engine.res" id="2_qf5lt"]
-[ext_resource type="Material" uid="uid://bandstk5dn67u" path="res://mapod4d_core/mapod4d_visitor/materials/mapod_mapod.res" id="3_8b2d0"]
-[ext_resource type="Material" uid="uid://c5omb04q7chuv" path="res://mapod4d_core/mapod4d_visitor/materials/mapod_reflector.res" id="4_t33oc"]
-[ext_resource type="Material" uid="uid://kcscqlu5cmoh" path="res://mapod4d_core/mapod4d_visitor/materials/mapod_probe.res" id="5_wf4h6"]
