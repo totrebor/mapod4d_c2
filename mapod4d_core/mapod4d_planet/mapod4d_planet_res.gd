@@ -21,10 +21,12 @@ extends Resource
 # ----- constants
 
 # ----- exported variables
-@export var name: String = ""
+@export var id: String = ""
+@export var descr: String = ""
 @export var planet_type : Mapod4dPlanet.MAPOD4D_PLANET_TYPE
 
 # ----- public variables
+
 
 # ----- private variables
 

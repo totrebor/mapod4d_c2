@@ -1,6 +1,15 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://bmi1dqefquou0"]
 
 [ext_resource type="Script" path="res://mapod4d_core/mapod4d_planet/mapod4d_base_sphere_planet/mapod4d_base_sphere_planet.gd" id="1_hh25n"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ysfvu"]
+albedo_color = Color(0.588235, 0.588235, 1, 1)
+
 [node name="Mapo4dBaseSphericalMetavese" type="Node3D"]
 script = ExtResource("1_hh25n")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+radius = 1.0
+radial_segments = 100
+rings = 100
+material = SubResource("StandardMaterial3D_ysfvu")

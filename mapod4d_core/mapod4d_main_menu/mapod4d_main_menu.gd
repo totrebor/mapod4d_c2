@@ -69,7 +69,7 @@ func _button_enter_into_metaverse_pressed():
 	var scene_name = _utils.get_metaverse_scene_path(
 			_metaverse_info.location, _metaverse_info.id)
 	print(scene_name)
-	emit_signal("m4d_scene_npb_requested", scene_name, true)
+	emit_signal("m4d_scene_requested", scene_name, true)
 
 
 func _on_button_main_exit_pressed():

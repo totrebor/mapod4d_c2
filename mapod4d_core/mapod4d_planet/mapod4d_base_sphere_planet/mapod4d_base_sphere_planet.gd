@@ -37,16 +37,15 @@ var _planet: Mapod4dPlanet
 
 # ----- built-in virtual _ready method
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_planet.planet_type = Mapod4dPlanet.SPHERE
-
+	_planet = Mapod4dPlanet.new()
+	_planet.planet_type = Mapod4dPlanet.MAPOD4D_PLANET_TYPE.SPHERE
 
 # ----- remaining built-in virtual methods
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass # Replace with function body.
 
 # ----- public methods

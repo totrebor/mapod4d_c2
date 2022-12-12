@@ -20,6 +20,7 @@ enum MAPOD4D_RUN_STATUS {
 
 # ----- constants
 const MAPOD4D_MAIN_RES = "res://mapod4d_core/mapod4d_main/mapod4d_main.tscn"
+const MAPOD4D_VISITOR = "res://mapod4d_core/mapod4d_visitor/mapod4d_visitor.tscn"
 const MAPOD4D_START = "res://mapod4d_core/mapod4d_start/mapod4d_start.tscn"
 const MAPOD4D_ROOT = "/root/Mapod4dMain"
 const MAPOD4D_LOADED_SCENE_NODE_TAG = "LoadedScene"
@@ -32,8 +33,6 @@ const MAPOD4D_LOADED_SCENE_NODE_TAG = "LoadedScene"
 # ----- private variables
 var _current_loaded_scene = null
 var _loading_scene_res_path = ""
-var _resource_loaded = false
-var _mapod4d_intro  = true
 var _mapod4d_run_status = MAPOD4D_RUN_STATUS.STANDARD
 var _progress = [ 0.0 ]
 
@@ -41,6 +40,7 @@ var _progress = [ 0.0 ]
 @onready var _mapod4d_main_res = preload(MAPOD4D_MAIN_RES)
 @onready var _mapod4d_main = get_node_or_null(MAPOD4D_ROOT)
 @onready var _start_scene_res = preload(MAPOD4D_START)
+@onready var _mapod4d_visitor_res = preload(MAPOD4D_VISITOR)
 
 
 # ----- optional built-in virtual _init method
@@ -123,9 +123,10 @@ func _f6_add_scene_to_main(scene):
 	var loaded_scene_placeholder = _mapod4d_main.get_node(
 			MAPOD4D_LOADED_SCENE_NODE_TAG)
 	## add new loaded scene
+	if scene.get_parent():
+		scene.get_parent().remove_child(scene)
 	loaded_scene_placeholder.add_child(scene)
-	scene.owner = loaded_scene_placeholder
-	scene.set_owner(_mapod4d_main)
+	scene.set_owner(get_node("/root"))
 	## new current scene
 	_current_loaded_scene = scene
 	ret_val = true
@@ -160,10 +161,11 @@ func _standard_start():
 	if y_position < 0:
 		y_position = 0
 	_current_loaded_scene.set_position(Vector2i(x_position, y_position))
+	_attach_current_loaded_scene_signals()
 	var placeholder = _mapod4d_main.get_node(MAPOD4D_LOADED_SCENE_NODE_TAG)
 	placeholder.add_child(_current_loaded_scene)
-	_current_loaded_scene.owner = _mapod4d_main
-	_attach_current_loaded_scene_signals()
+	#_current_loaded_scene.owner = _mapod4d_main
+	_current_loaded_scene.set_owner(get_node("/root"))
 
 
 ## load scene without progressbar and update
@@ -179,12 +181,19 @@ func _load_npb_scene(scene_path):
 			if placeholder.get_child_count() > 0:
 				var children = placeholder.get_children()
 				for child in children:
+					placeholder.remove_child(child)
 					child.queue_free()
-			## add new loaded scene
-			placeholder.add_child(scene)
-			scene.set_owner(_mapod4d_main)
 			## new current scene
 			_current_loaded_scene = scene
+			_add_mapod()
+			## add new loaded scene
+			if _current_loaded_scene.get_parent():
+				_current_loaded_scene.get_parent().remove_child(
+					_current_loaded_scene)
+			placeholder.add_child(_current_loaded_scene)
+			#_current_loaded_scene.set_owner(_mapod4d_main)
+			_current_loaded_scene.set_owner(get_node("/root"))
+			_attach_current_loaded_scene_signals()
 			ret_val = true
 	return ret_val
 
@@ -233,13 +242,17 @@ func _load_scene_ended():
 			var children = placeholder.get_children()
 			for child in children:
 				child.queue_free()
-		## add new loaded scene
-		placeholder.add_child(scene_instance)
-		scene_instance.owner = _mapod4d_main
 		## new current scene
 		_current_loaded_scene = scene_instance
+		_add_mapod()
+		## add new loaded scene
+		if _current_loaded_scene.get_parent():
+			_current_loaded_scene.get_parent().remove_child(
+					_current_loaded_scene)
+		placeholder.add_child(scene_instance)
+		_current_loaded_scene.set_owner(get_node("/root"))
+		_attach_current_loaded_scene_signals()
 	_end_loading_progress_bar()
-	_attach_current_loaded_scene_signals()
 
 
 ## load scene no progress bar and update
@@ -257,6 +270,20 @@ func _attach_current_loaded_scene_signals():
 		_current_loaded_scene.m4d_scene_npb_requested.connect(
 			_on_m4d_scene_npb_requested, CONNECT_DEFERRED)
 
+func _add_mapod():
+	print("_add_mapod()")
+	
+	if _current_loaded_scene is Mapod4dBaseMetaverse:
+		print("_current_loaded_scene is Mapod4dBaseMetaverse")
+		var place_holder = _current_loaded_scene.get_node_or_null("MapodArea")
+#		if place_holder != null:
+#			var mapod = _mapod4d_visitor_res.instantiate()
+#			mapod.set_position(Vector3(-10, 5, 5))
+#			place_holder.add_child(mapod)
+#			mapod.owner = get_node("/root")
+
+	elif _current_loaded_scene is Mapod4dSpherePlanet:
+		print("_current_loaded_scene is Mapod4dSpherePlanet")
 
 
 ## elaborates signal load new scene 
