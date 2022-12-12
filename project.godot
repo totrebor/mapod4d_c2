@@ -9,11 +9,6 @@
 config_version=5
 
 _global_script_classes=[{
-"base": "CharacterBody3D",
-"class": &"Mapod4DVisitor",
-"language": &"GDScript",
-"path": "res://mapod4d_core/mapod4d_visitor/mapod4d_visitor.gd"
-}, {
 "base": "Node3D",
 "class": &"Mapod4dBaseMetaverse",
 "language": &"GDScript",
@@ -60,7 +55,6 @@ _global_script_classes=[{
 "path": "res://mapod4d_core/mapod4d_utils/mapod4d_utils.gd"
 }]
 _global_script_class_icons={
-"Mapod4DVisitor": "",
 "Mapod4dBaseMetaverse": "",
 "Mapod4dBaseUi": "",
 "Mapod4dListOfPlanetsRes": "",

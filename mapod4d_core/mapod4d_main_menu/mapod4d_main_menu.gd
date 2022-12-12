@@ -60,20 +60,16 @@ func _process(_delta):
 func _on_list_of_metaverses_selected(metaverse_id):
 	print("_on_list_of_metaverses_selected")
 	_metaverse_info = _list_of_metaverses.get_item_metadata(metaverse_id)
-	print(_metaverse_info.name)
+	print(_metaverse_info.id)
 	_button_enter_into_metaverse.disabled = false
 	
 
 func _button_enter_into_metaverse_pressed():
 	print("_button_enter_into_metaverse_pressed")
-	var scene_name = _utils.get_metaverse_scene(
-			_metaverse_info.location, _metaverse_info.name)
+	var scene_name = _utils.get_metaverse_scene_path(
+			_metaverse_info.location, _metaverse_info.id)
 	print(scene_name)
-<<<<<<< HEAD
 	emit_signal("m4d_scene_requested", scene_name, true)
-=======
-#	emit_signal("m4d_scene_npb_requested", scene_name, true)
->>>>>>> parent of fe2b88d (new scene load in mapod4d_autoload)
 
 
 func _on_button_main_exit_pressed():
