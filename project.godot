@@ -22,7 +22,7 @@ _global_script_classes=[{
 "base": "Resource",
 "class": &"Mapod4dListOfPlanetsRes",
 "language": &"GDScript",
-"path": "res://mapod4d_core/mapod4d_base_metaverse/mapod4d_list_of_planets.gd"
+"path": "res://mapod4d_core/mapod4d_base_metaverse/mapod4d_list_of_planets_res.gd"
 }, {
 "base": "Resource",
 "class": &"Mapod4dMa4dRes",

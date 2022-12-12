@@ -86,6 +86,7 @@ func get_metaverse_scene_path(
 func get_metaverse_element_path(
 		location: MAPOD4D_METAVERSE_LOCATION,
 		metaverse_id: String, element_name: String):
+	_current_location = get_multiverse_location(location)
 	set_current_metaverse_paths(metaverse_id)
 	var ret_val = _metaverse_dir + "/" + element_name
 	return ret_val
