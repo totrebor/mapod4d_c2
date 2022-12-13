@@ -43,6 +43,7 @@ var _metaverse_id = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	_metaverse_id = str(name).to_lower()
 	var list_of_planets_path = _utils.get_metaverse_element_path(
 			location, _metaverse_id, "list_of_planets.tres"

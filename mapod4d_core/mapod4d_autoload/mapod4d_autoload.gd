@@ -40,6 +40,7 @@ var _progress = [ 0.0 ]
 @onready var _mapod4d_main_res = preload(MAPOD4D_MAIN_RES)
 @onready var _mapod4d_main = get_node_or_null(MAPOD4D_ROOT)
 @onready var _start_scene_res = preload(MAPOD4D_START)
+@onready var _mapod4d_visitor_res = preload(MAPOD4D_VISITOR)
 
 
 # ----- optional built-in virtual _init method
@@ -272,14 +273,16 @@ func _attach_current_loaded_scene_signals():
 func _add_mapod():
 	print("_add_mapod()")
 	
-#	if _current_loaded_scene is Mapod4dBaseMetaverse:
-#		print("_current_loaded_scene is Mapod4dBaseMetaverse")
-#		var place_holder = _current_loaded_scene.get_node_or_null("MapodArea")
-#		if place_holder != null:
-#			var mapod = _mapod4d_visitor_res.instantiate()
-#			mapod.set_position(Vector3(-10, 5, 5))
-#			place_holder.add_child(mapod)
-#			mapod.owner = get_node("/root")
+	if _current_loaded_scene is Mapod4dBaseMetaverse:
+		print("_current_loaded_scene is Mapod4dBaseMetaverse")
+		var place_holder = _current_loaded_scene.get_node_or_null("MapodArea")
+		if place_holder != null:
+			var mapod = _mapod4d_visitor_res.instantiate()
+			mapod.set_position(Vector3(0, 0, 10))
+			mapod.current_camera_flag = true
+			mapod.input_disabled_flag = false
+			place_holder.add_child(mapod)
+			mapod.owner = get_node("/root")
 #
 #	elif _current_loaded_scene is Mapod4dSpherePlanet:
 #		print("_current_loaded_scene is Mapod4dSpherePlanet")
