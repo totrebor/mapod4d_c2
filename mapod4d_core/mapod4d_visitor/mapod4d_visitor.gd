@@ -32,15 +32,15 @@ extends CharacterBody3D
 		if camera != null:
 			camera.current = new_current_camera
 ## mouse orizzontal sensitivity
-@export var oriz_mouse_sensitivity: float = 10.0
+@export var oriz_mouse_sensitivity: float = 4
 ## mouse vertical sensitivity
-@export var vert_mouse_sensitivity: float = 10.0
+@export var vert_mouse_sensitivity: float = 4
 ## coefficient of velocity reduction
 @export var coef_vel_reduc: float = 3
 ## forwad speed multiplier
-@export var forward_speed_multi: float = 0.5
+@export var forward_speed_multi: float = 1
 ## right speed multiplier
-@export var right_speed_multi: float = 0.5
+@export var right_speed_multi: float = 1
 ## up speed multiplier
 @export var up_speed_multi: float = 0.5
 
@@ -97,8 +97,8 @@ func _handle_tick(delta):
 	var local_up_speed = 0.0
 
 	## data linear interpolated
-	local_rotation.x = lerp(input_rotation.x, local_rotation.x, delta * vert_mouse_sensitivity)
-	local_rotation.y = lerp(input_rotation.y, local_rotation.y, delta * oriz_mouse_sensitivity)
+	local_rotation.x = lerp(local_rotation.x, input_rotation.x, delta * vert_mouse_sensitivity)
+	local_rotation.y = lerp(local_rotation.y, input_rotation.y, delta * oriz_mouse_sensitivity)
 	local_forward_speed = lerp(
 			_input_forward_speed * forward_speed_multi, local_forward_speed, delta * coef_vel_reduc)
 	local_right_speed = lerp(
