@@ -26,7 +26,8 @@ enum MAPOD4D_METAVERSE_LOCATION {
 # ----- constants
 const MAPOD4D_METAVERSE_EXT = "ma4d"
 const TEMPL_DIR = "res://mapod4d_templates/"
-const TEMPL_METAVERESE = "mapod_4d_templ_metaverse.tscn"
+const TEMPL_METAVERESE = "mapod4d_templ_metaverse.tscn"
+const TEMPL_LIST_OF_PLANET = "mapod4d_templ_list_of_planets.res"
 
 # ----- exported variables
 
@@ -166,8 +167,12 @@ func metaverse_scaffold(
 					TEMPL_METAVERESE,
 					_metaverse_dir + "/" + metaverse_id + ".tscn", 
 					metaverse_name):
-				ret_val.scenes_list.push_front(_metaverse_dir)
-			ret_val.response = true
+				if _save_templ_list_of_planets(
+					TEMPL_LIST_OF_PLANET,
+					_metaverse_dir + "/list_of_planets.res",
+				):
+					ret_val.scenes_list.push_front(_metaverse_dir)
+					ret_val.response = true
 		else:
 			printerr("Metaverse directory already exists")
 	return ret_val
@@ -251,21 +256,33 @@ func _save_templ_scene(
 		source_name: String, dest_path: String, root_node_name: String):
 	var ret_val = false
 	if ResourceLoader.exists(TEMPL_DIR + source_name, "PackedScene"):
-		print("1")
 		var lscene: PackedScene = load(TEMPL_DIR + source_name)
-		print("2")
 		var node : Node = lscene.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)
-		print("3")
 		node.set_name(root_node_name)
-		print("4")
 		var scene: PackedScene = PackedScene.new()
-		print("5")
 		scene.pack(node)
-		print("6")
 		var error = ResourceSaver.save(scene, dest_path)
-		print(dest_path + " 7")
 		if error != OK:
 			push_error("An error occurred while saving the scene to disk.")
+		else:
+			ret_val = true
+	else:
+		printerr(TEMPL_DIR + source_name + " not found")
+	return ret_val
+
+
+## load res template list_of_planets
+## save new res
+func _save_templ_list_of_planets(
+		source_name: String, dest_path: String):
+	var ret_val = false
+#	if ResourceLoader.exists(
+#		TEMPL_DIR + source_name, "Mapod4dListOfPlanetsRes"):
+	if ResourceLoader.exists(TEMPL_DIR + source_name):
+		var res: Mapod4dListOfPlanetsRes = load(TEMPL_DIR + source_name)
+		var error = ResourceSaver.save(res, dest_path)
+		if error != OK:
+			push_error("An error occurred while saving the res to disk.")
 		else:
 			ret_val = true
 	else:
