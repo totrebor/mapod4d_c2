@@ -59,6 +59,7 @@ extends CharacterBody3D
 @onready var _camera := $RotationHelper/Camera3d
 @onready var _mapod := $Mapod
 @onready var _mapod_visitor := $Mapod/MapodVisitor
+@onready var _hud := $Hud
 @onready var _keyboard_status = {
 	"rotate_right" = false,
 	"rotate_left" = false,
@@ -196,10 +197,10 @@ func _unhandled_input(event):
 
 		elif event is InputEventMouseMotion:
 			_input_rotation_vector = event.relative
-			print(str(event))
+#			print(str(event))
 
 		elif event is InputEventJoypadMotion:
-			print(str(event))
+#			print(str(event))
 			if event.axis == 1:
 				pass
 

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1x50m0vogbgt"]
+
+[sub_resource type="Environment" id="Environment_6sw1k"]
+
+[node name="Mapo4dPlanetSphere" type="Node3D"]
+
+[node name="Crust" type="Node3D" parent="."]
+
+[node name="PlanetEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6sw1k")

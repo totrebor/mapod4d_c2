@@ -1,10 +1,10 @@
 # tool
 
 # class_name
-class_name Mapod4dPlanetRes
+class_name Mapod4dPlanetCore
 
 # extends
-extends Resource
+extends Object
 
 ## A brief description of your script.
 ##
@@ -18,17 +18,19 @@ extends Resource
 
 # ----- enums
 
-# ----- constants
 
-# ----- exported variables
-@export var id: String = ""
-@export var descr: String = ""
-@export var planet_type : Mapod4dPlanet.MAPOD4D_PLANET_TYPE
+# ----- constants
 
 # ----- public variables
 
 
 # ----- private variables
+var _core_data: Mapod4dPlanetCoreRes
 
-# ----- onready variables
+# ----- public methods
+
+func setPlanetType(pType: Mapod4dPlanetCoreRes.MAPOD4D_PLANET_TYPE):
+	_core_data.planet_type = pType
+
+# ----- private methods
 

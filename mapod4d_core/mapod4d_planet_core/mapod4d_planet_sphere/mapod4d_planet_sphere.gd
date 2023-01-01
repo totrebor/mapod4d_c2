@@ -1,7 +1,7 @@
 # tool
 
 # class_name
-class_name Mapod4dSpherePlanet
+class_name Mapod4dPlanetSphere
 # extends
 extends Node3D
 
@@ -20,9 +20,9 @@ extends Node3D
 # ----- exported variables
 
 # ----- public variables
+var core: Mapod4dPlanetCore
 
 # ----- private variables
-var _planet: Mapod4dPlanet
 
 # ----- onready variables
 
@@ -39,8 +39,8 @@ var _planet: Mapod4dPlanet
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_planet = Mapod4dPlanet.new()
-	_planet.planet_type = Mapod4dPlanet.MAPOD4D_PLANET_TYPE.SPHERE
+	core = Mapod4dPlanetCore.new()
+	core.setCoreType(Mapod4dPlanetCoreRes.MAPOD4D_PLANET_TYPE.SPHERE)
 
 # ----- remaining built-in virtual methods
 

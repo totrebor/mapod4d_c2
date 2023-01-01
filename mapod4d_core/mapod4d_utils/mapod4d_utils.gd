@@ -41,6 +41,7 @@ var _metaverse_scene_path = ""
 var _metaverse_data_path = ""
 var _metaverse_dir_assets = ""
 var _metaverse_dir_tamt = ""
+var _metaverse_dir_planets = ""
 
 # ----- onready variables
 
@@ -76,6 +77,7 @@ func set_current_metaverse_paths(metaverse_id):
 	_metaverse_data_path = _metaverse_dir + "/" + metaverse_id + ".ma4d"
 	_metaverse_dir_assets = _metaverse_dir + "/" + "assets"
 	_metaverse_dir_tamt = _metaverse_dir + "/" + "tamt"
+	_metaverse_dir_planets = _metaverse_dir + "/" + "planets"
 
 
 func get_metaverse_scene_path(
@@ -161,6 +163,7 @@ func metaverse_scaffold(
 				file = null
 			dir.make_dir(_metaverse_dir_assets)
 			dir.make_dir(_metaverse_dir_tamt)
+			dir.make_dir(_metaverse_dir_planets)
 			var metaverse_name = metaverse_id.substr(0,1).to_upper()
 			metaverse_name += metaverse_id.substr(1)
 			if _save_templ_scene(
@@ -211,7 +214,7 @@ func planet_scaffold(
 		_location: MAPOD4D_METAVERSE_LOCATION,
 		_metaverse_id: String,
 		_planet_id,
-		_planet_type: Mapod4dPlanet.MAPOD4D_PLANET_TYPE):
+		_planet_type: Mapod4dPlanetCoreRes.MAPOD4D_PLANET_TYPE):
 	pass
 
 

@@ -21,8 +21,8 @@ extends Node3D
 
 # ----- constants
 const planet_sphere_res = preload(
-	"res://mapod4d_core/mapod4d_planet/mapod4d_base_sphere_planet/" + \
-	"mapod4d_base_sphere_planet.tscn") 
+	"res://mapod4d_core/mapod4d_planet_model/mapod4d_planet_model_sphere/" + \
+	"mapod4d_planet_model_sphere.tscn") 
 
 # ----- exported variables
 
@@ -46,14 +46,14 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	_metaverse_id = str(name).to_lower()
 	var list_of_planets_path = _utils.get_metaverse_element_path(
-			location, _metaverse_id, "list_of_planets.tres"
+			location, _metaverse_id, "list_of_planets.res"
 	)
 	_list_of_planets = load(list_of_planets_path)
 	var placeolder = get_node_or_null("Planets")
 	if placeolder != null:
 		var x_pos = 0
 		for planet_data in _list_of_planets.list:
-			if planet_data is Mapod4dPlanetRes:
+			if planet_data is Mapod4dPlanetCoreRes:
 				var planet = planet_sphere_res.instantiate()
 				planet.set_name(planet_data.id)
 				planet.set_position(Vector3(x_pos, 0, 0))

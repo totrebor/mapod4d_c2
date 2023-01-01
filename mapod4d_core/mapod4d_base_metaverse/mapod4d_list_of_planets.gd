@@ -2,5 +2,5 @@ class_name Mapod4dListOfPlanetsRes
 extends Resource
 
 
-@export var list : Array[Mapod4dPlanetRes] = Array()
+@export var list : Array[Mapod4dPlanetCoreRes] = Array()
 

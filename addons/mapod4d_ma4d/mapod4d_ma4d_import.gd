@@ -22,7 +22,7 @@ func _get_save_extension():
 
 
 func _get_resource_type():
-	return "BaseMeMapod4dRes"
+	return "Mapod4dMa4dRes"
 
 
 func _get_priority():

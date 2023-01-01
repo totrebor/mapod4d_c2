@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bui8bm62fn2x"]
+
+[ext_resource type="PackedScene" uid="uid://be5pv5xt1e56e" path="res://mapod4d_core/mapod4d_planet_model/mapod4d_planet_model.tscn" id="1_nh77c"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_8vm4v"]
+radius = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ficdo"]
+albedo_color = Color(0.478431, 0.643137, 1, 1)
+
+[node name="Mapod4dPlanetModelSphere" instance=ExtResource("1_nh77c")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
+shape = SubResource("SphereShape3D_8vm4v")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="StaticBody3D/CollisionShape3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0176109)
+radius = 1.0
+radial_segments = 100
+rings = 100
+material = SubResource("StandardMaterial3D_ficdo")
