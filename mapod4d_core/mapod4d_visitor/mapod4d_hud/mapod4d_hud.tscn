@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://mapod4d_core/mapod4d_visitor/mapod4d_hud/view_finder.gd" id="1_vm5tx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gux8h"]
-bg_color = Color(0.376471, 0.376471, 0.376471, 0.196078)
+bg_color = Color(0.376471, 0.376471, 0.376471, 0.176471)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -64,3 +64,64 @@ layout_mode = 2
 [node name="Info" type="Label" parent="GridContainer/MarginContainer/VBoxContainer/Help/HBoxContainer"]
 layout_mode = 2
 text = "Per richiamare il menu principale"
+
+[node name="Planet" type="PanelContainer" parent="GridContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gux8h")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer/MarginContainer/VBoxContainer/Planet"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="GridContainer/MarginContainer/VBoxContainer/Planet/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+text = "PLANET"
+
+[node name="PlanetData" type="Label" parent="GridContainer/MarginContainer/VBoxContainer/Planet/VBoxContainer"]
+layout_mode = 2
+
+[node name="Altitude" type="PanelContainer" parent="GridContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gux8h")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer/MarginContainer/VBoxContainer/Altitude"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="GridContainer/MarginContainer/VBoxContainer/Altitude/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+text = "ALTITUDE"
+
+[node name="AltitudeData" type="Label" parent="GridContainer/MarginContainer/VBoxContainer/Altitude/HBoxContainer"]
+layout_mode = 2
+
+[node name="Speed" type="PanelContainer" parent="GridContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gux8h")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer/MarginContainer/VBoxContainer/Speed"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="GridContainer/MarginContainer/VBoxContainer/Speed/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+text = "VELOCITY"
+
+[node name="SpeedData" type="Label" parent="GridContainer/MarginContainer/VBoxContainer/Speed/HBoxContainer"]
+layout_mode = 2
+
+[node name="Information" type="PanelContainer" parent="GridContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gux8h")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer/MarginContainer/VBoxContainer/Information"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="GridContainer/MarginContainer/VBoxContainer/Information/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+text = "INFORMATION"
+
+[node name="InformationData" type="Label" parent="GridContainer/MarginContainer/VBoxContainer/Information/VBoxContainer"]
+layout_mode = 2
