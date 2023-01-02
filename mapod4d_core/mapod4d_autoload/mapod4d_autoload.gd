@@ -36,6 +36,9 @@ var _loading_scene_res_path = ""
 var _mapod4d_run_status = MAPOD4D_RUN_STATUS.STANDARD
 var _progress = [ 0.0 ]
 
+var _current_metaverse_res_path = ""
+var _current_planet_res_path = ""
+
 # ----- onready variables
 @onready var _mapod4d_main_res = preload(MAPOD4D_MAIN_RES)
 @onready var _mapod4d_main = get_node_or_null(MAPOD4D_ROOT)
@@ -262,13 +265,17 @@ func _attach_current_loaded_scene_signals():
 	if _current_loaded_scene is Mapod4dBaseUi:
 		print("_current_loaded_scene is Mapod4dBaseUi")
 #		_current_loaded_scene.m4d_scene_requested.connect(
-#			_on_m4d_scene_requested)
+	#			_on_m4d_scene_requested)
 #		_current_loaded_scene.m4d_scene_npb_requested.connect(
-#			_on_m4d_scene_npb_requested)
+#				_on_m4d_scene_npb_requested)
 		_current_loaded_scene.m4d_scene_requested.connect(
-			_on_m4d_scene_requested, CONNECT_DEFERRED)
+				_on_m4d_scene_requested, CONNECT_DEFERRED)
 		_current_loaded_scene.m4d_scene_npb_requested.connect(
-			_on_m4d_scene_npb_requested, CONNECT_DEFERRED)
+				_on_m4d_scene_npb_requested, CONNECT_DEFERRED)
+		_current_loaded_scene.m4d_metaverse_requested.connect(
+				_on_m4d_metaverse_requested, CONNECT_DEFERRED)
+		_current_loaded_scene.m4d_planet_requested.connect(
+				_on_m4d_planet_requested, CONNECT_DEFERRED)
 
 
 # add mapod (visitor)
@@ -283,16 +290,26 @@ func _add_mapod():
 			mapod.input_disabled_flag = false
 			place_holder.add_child(mapod)
 			mapod.set_owner(place_holder)
-#			mapod.set_owner(get_node("/root"))
-#
+			## connects signals
+			mapod.m4d_scene_requested.connect(
+					_on_m4d_scene_requested, CONNECT_DEFERRED)
+			mapod.m4d_scene_npb_requested.connect(
+					_on_m4d_scene_npb_requested, CONNECT_DEFERRED)
+			mapod.m4d_metaverse_requested.connect(
+					_on_m4d_metaverse_requested, CONNECT_DEFERRED)
+			mapod.m4d_planet_requested.connect(
+					_on_m4d_planet_requested, CONNECT_DEFERRED)
 #	elif _current_loaded_scene is Mapod4dSpherePlanet:
 #		print("_current_loaded_scene is Mapod4dSpherePlanet")
 
 
 ## elaborates signal load new scene 
-## without thr progressbar and the fullscreen flag
-func _on_m4d_scene_npb_requested(scene_path, fullscreen_flag):
-	print("_on_scene_npd_requested " + scene_path + " " + str(fullscreen_flag))
+## without the progressbar and the fullscreen flag
+func _on_m4d_scene_npb_requested(scene_res_path, fullscreen_flag):
+	print("_on_scene_npd_requested " + \
+			scene_res_path + " " + str(fullscreen_flag))
+	_current_metaverse_res_path = ""
+	_current_planet_res_path = ""
 	if _mapod4d_run_status == MAPOD4D_RUN_STATUS.F6:
 		pass
 	else:
@@ -301,14 +318,17 @@ func _on_m4d_scene_npb_requested(scene_path, fullscreen_flag):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		# load scene
-		if _load_npb_scene(scene_path) == true:
+		if _load_npb_scene(scene_res_path) == true:
 			_attach_current_loaded_scene_signals()
 
 
 ## elaborates signal load new scene 
 ## with the progressbar and the fullscreen flag
-func _on_m4d_scene_requested(scene_path, fullscreen_flag):
-	print("_on_scene_requested " + scene_path + " " + str(fullscreen_flag))
+func _on_m4d_scene_requested(scene_res_path, fullscreen_flag):
+	print("_on_scene_requested " + \
+			scene_res_path + " " + str(fullscreen_flag))
+	_current_metaverse_res_path = ""
+	_current_planet_res_path = ""
 	if _mapod4d_run_status == MAPOD4D_RUN_STATUS.F6:
 		pass
 	else:
@@ -317,4 +337,37 @@ func _on_m4d_scene_requested(scene_path, fullscreen_flag):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		# load scene deferred
-		_start_load_scene(scene_path)
+		_start_load_scene(scene_res_path)
+
+
+## elaborates signal load new metaverse 
+## with the progressbar and the fullscreen flag
+func _on_m4d_metaverse_requested(metaverse_res_path, fullscreen_flag):
+	_current_metaverse_res_path = metaverse_res_path
+	_current_planet_res_path = ""
+	if _mapod4d_run_status == MAPOD4D_RUN_STATUS.F6:
+		pass
+	else:
+		_current_loaded_scene.visible = false
+		if fullscreen_flag == true:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		# load scene deferred
+		_start_load_scene(metaverse_res_path)
+
+## elaborates signal load new metaverse 
+## with the progressbar and the fullscreen flag
+func _on_m4d_planet_requested(
+		metaverse_res_path: String, planet_res_path: String, fullscreen_flag):
+	_current_metaverse_res_path = metaverse_res_path
+	_current_planet_res_path = planet_res_path
+	if _mapod4d_run_status == MAPOD4D_RUN_STATUS.F6:
+		pass
+	else:
+		_current_loaded_scene.visible = false
+		if fullscreen_flag == true:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		# load scene deferred
+		_start_load_scene(planet_res_path)
+

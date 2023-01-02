@@ -3,11 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://ctyeh2pkqk84a" path="res://mapod4d_core/mapod4d_object/mapod4d_object_static/mapod4d_object_static.tscn" id="1_vt28x"]
 [ext_resource type="Script" path="res://mapod4d_core/mapod4d_object/mapod4d_object_static/mapod4d_os_planet_model_sphere/mapod4d_os_planet_model_sphere.gd" id="2_fxu1e"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5iigm"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4tmrn"]
 albedo_color = Color(0.784314, 0.784314, 1, 1)
 metallic = 1.0
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_3mbo2"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_2auc5"]
 radius = 1.0
 
 [node name="Mapod4dOSPlanetModelSphere" instance=ExtResource("1_vt28x")]
@@ -17,7 +17,7 @@ script = ExtResource("2_fxu1e")
 radius = 1.0
 radial_segments = 100
 rings = 100
-material = SubResource("StandardMaterial3D_5iigm")
+material = SubResource("StandardMaterial3D_4tmrn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
-shape = SubResource("SphereShape3D_3mbo2")
+shape = SubResource("SphereShape3D_2auc5")

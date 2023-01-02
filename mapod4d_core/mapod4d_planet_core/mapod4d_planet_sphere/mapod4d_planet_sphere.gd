@@ -21,6 +21,7 @@ extends Node3D
 
 # ----- public variables
 var core: Mapod4dPlanetCore
+var metaverse = null
 
 # ----- private variables
 
