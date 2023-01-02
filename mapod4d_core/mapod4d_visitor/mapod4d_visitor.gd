@@ -36,18 +36,18 @@ extends CharacterBody3D
 ## mouse vertical sensitivity
 @export var vert_mouse_sensitivity: float = 4
 ## coefficient of velocity reduction
-@export var coef_vel_reduc: float = 3
+@export var coef_vel_reduc: float = 5
 ## forwad speed multiplier
-@export var forward_speed_multi: float = 1
+@export var forward_speed_multi: float = 1.1
 ## right speed multiplier
 @export var right_speed_multi: float = 1
 ## up speed multiplier
 @export var up_speed_multi: float = 0.5
 
-
 # ----- public variables
 
 # ----- private variables
+var _debug = 0
 
 # ----- onready variables
 @onready var _input_rotation_vector = Vector2(0, 0)
@@ -145,8 +145,24 @@ func _physics_process(delta):
 #		print("colliding")
 		var object = _ray_cast.get_collider()
 		if object is Mapod4dObjectStatic:
-			pass
-#			print(object.get_object().information)
+#			print("COLL " + str(_debug))
+			_debug = _debug + 1
+			var internal_object = object.get_object()
+			if internal_object.intE == true:
+#				print("enableIntE()")
+				_hud.enableIntE()
+			else:
+				print("disableIntE()")
+#				_hud.disableIntE()
+			if internal_object.intR == true:
+#				print("enableIntR()")
+				_hud.enableIntR()
+			else:
+#				print("disableIntR()")
+				_hud.disableIntR()
+	else:
+		_hud.disableIntE()
+		_hud.disableIntR()
 
 
 func _unhandled_input(event):

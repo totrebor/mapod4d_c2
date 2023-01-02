@@ -23,6 +23,8 @@ extends Node
 # ----- exported variables
 
 # ----- public variables
+
+# object description
 var information: String = "object":
 	get:
 		return information
@@ -31,6 +33,10 @@ var information: String = "object":
 			information = "object"
 		else:
 			information = value
+# interaction type E
+var intE := true
+# interaction type R
+var intR := false
 
 # ----- private variables
 

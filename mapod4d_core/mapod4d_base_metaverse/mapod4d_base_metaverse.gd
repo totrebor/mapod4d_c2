@@ -54,15 +54,15 @@ func _ready():
 	_list_of_planets = load(list_of_planets_path)
 	var placeolder = get_node_or_null("Planets")
 	if placeolder != null:
-		var x_pos = 0
-		var z_pos = 0
+		var x_pos = 0.0
+		var z_pos = 0.0
 		for planet_data in _list_of_planets.list:
 			if planet_data is Mapod4dPlanetCoreRes:
 				var planet = planet_sphere_res.instantiate()
 				planet.set_name(planet_data.id)
 				planet.set_position(Vector3(x_pos, 0, z_pos))
-				z_pos = z_pos - (1.5 + (1 / (1 + x_pos)))
-				x_pos = x_pos + 3
+				z_pos = z_pos - (1.5 + (1.0 / (1.0 + x_pos)))
+				x_pos = x_pos + 3.0
 				placeolder.add_child(planet)
 				planet.set_owner(placeolder)
 

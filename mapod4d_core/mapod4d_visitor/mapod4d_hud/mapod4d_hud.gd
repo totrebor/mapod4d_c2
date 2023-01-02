@@ -25,6 +25,8 @@ extends Control
 # ----- public variables
 
 # ----- private variables
+@onready var _interactionE = %InteractionE
+@onready var _interactionR = %InteractionR
 
 # ----- onready variables
 
@@ -44,5 +46,20 @@ func _process(delta):
 	pass # Replace with function body.
 
 # ----- public methods
+
+func enableIntE():
+	_interactionE.visible = true
+
+
+func disableIntE():
+	_interactionE.visible = false
+
+
+func enableIntR():
+	_interactionR.visible = true
+
+
+func disableIntR():
+	_interactionR.visible = false
 
 # ----- private methods

@@ -53,7 +53,7 @@ func _draw():
 	var N = 8
 	_draw_regular_polygon(cen, side, N, 3.0, Color(0.2, 0.2, 0.2, 0.3))
 	side = 40
-	_draw_cross(cen, side, 2.0, Color(1, 1, 1, 0.1), Color(0, 0, 0, 0.1))
+	_draw_cross(cen, side, 2.0, Color(1, 1, 1, 0.2), Color(0, 0, 0, 0.2))
 
 
 # draw octagone
