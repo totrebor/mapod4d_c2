@@ -20,10 +20,13 @@ extends Node3D
 # ----- enums
 
 # ----- constants
+#const planet_sphere_res = preload(
+#	"res://mapod4d_core/mapod4d_planet_model/mapod4d_planet_model_sphere/" + \
+#	"mapod4d_planet_model_sphere.tscn") 
 const planet_sphere_res = preload(
-	"res://mapod4d_core/mapod4d_planet_model/mapod4d_planet_model_sphere/" + \
-	"mapod4d_planet_model_sphere.tscn") 
-
+		"res://mapod4d_core/mapod4d_object/mapod4d_object_static/" + \
+		"mapod4d_os_planet_model_sphere/mapod4d_os_planet_model_sphere.tscn")
+	
 # ----- exported variables
 
 # ----- public variables
@@ -52,14 +55,16 @@ func _ready():
 	var placeolder = get_node_or_null("Planets")
 	if placeolder != null:
 		var x_pos = 0
+		var z_pos = 0
 		for planet_data in _list_of_planets.list:
 			if planet_data is Mapod4dPlanetCoreRes:
 				var planet = planet_sphere_res.instantiate()
 				planet.set_name(planet_data.id)
-				planet.set_position(Vector3(x_pos, 0, 0))
+				planet.set_position(Vector3(x_pos, 0, z_pos))
+				z_pos = z_pos - (1.5 + (1 / (1 + x_pos)))
 				x_pos = x_pos + 3
 				placeolder.add_child(planet)
-				set_owner(self)
+				planet.set_owner(placeolder)
 
 # ----- remaining built-in virtual methods
 

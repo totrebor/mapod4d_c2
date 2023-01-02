@@ -270,9 +270,9 @@ func _attach_current_loaded_scene_signals():
 		_current_loaded_scene.m4d_scene_npb_requested.connect(
 			_on_m4d_scene_npb_requested, CONNECT_DEFERRED)
 
+
+# add mapod (visitor)
 func _add_mapod():
-	print("_add_mapod()")
-	
 	if _current_loaded_scene is Mapod4dBaseMetaverse:
 		print("_current_loaded_scene is Mapod4dBaseMetaverse")
 		var place_holder = _current_loaded_scene.get_node_or_null("MapodArea")
@@ -282,7 +282,8 @@ func _add_mapod():
 			mapod.current_camera_flag = true
 			mapod.input_disabled_flag = false
 			place_holder.add_child(mapod)
-			mapod.owner = get_node("/root")
+			mapod.set_owner(place_holder)
+#			mapod.set_owner(get_node("/root"))
 #
 #	elif _current_loaded_scene is Mapod4dSpherePlanet:
 #		print("_current_loaded_scene is Mapod4dSpherePlanet")

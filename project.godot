@@ -34,6 +34,16 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://mapod4d_core/mapod4d_main/mapod4d_main.gd"
 }, {
+"base": "Node",
+"class": &"Mapod4dObject",
+"language": &"GDScript",
+"path": "res://mapod4d_core/mapod4d_object/mapod4d_object.gd"
+}, {
+"base": "StaticBody3D",
+"class": &"Mapod4dObjectStatic",
+"language": &"GDScript",
+"path": "res://mapod4d_core/mapod4d_object/mapod4d_object_static/mapod4d_object_static.gd"
+}, {
 "base": "Object",
 "class": &"Mapod4dPlanetCore",
 "language": &"GDScript",
@@ -65,6 +75,8 @@ _global_script_class_icons={
 "Mapod4dListOfPlanetsRes": "",
 "Mapod4dMa4dRes": "",
 "Mapod4dMain": "",
+"Mapod4dObject": "",
+"Mapod4dObjectStatic": "",
 "Mapod4dPlanetCore": "",
 "Mapod4dPlanetCoreRes": "",
 "Mapod4dPlanetSphere": "",
@@ -160,6 +172,11 @@ mapod4d_down={
 
 locale/translations=PackedStringArray("res://localization/localization.en.translation", "res://localization/localization.it.translation")
 locale/locale_filter_mode=0
+
+[layer_names]
+
+3d_physics/layer_1="general"
+3d_physics/layer_2="objects"
 
 [physics]
 

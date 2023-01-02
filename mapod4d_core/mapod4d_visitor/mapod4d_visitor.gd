@@ -59,6 +59,7 @@ extends CharacterBody3D
 @onready var _camera := $RotationHelper/Camera3d
 @onready var _mapod := $Mapod
 @onready var _mapod_visitor := $Mapod/MapodVisitor
+@onready var _ray_cast = $RotationHelper/Camera3d/RayCast3D
 @onready var _hud := $Hud
 @onready var _keyboard_status = {
 	"rotate_right" = false,
@@ -140,6 +141,12 @@ func _process(_delta):
 
 func _physics_process(delta):
 	_handle_tick(delta)
+	if _ray_cast.is_colliding():
+#		print("colliding")
+		var object = _ray_cast.get_collider()
+		if object is Mapod4dObjectStatic:
+			pass
+#			print(object.get_object().information)
 
 
 func _unhandled_input(event):
