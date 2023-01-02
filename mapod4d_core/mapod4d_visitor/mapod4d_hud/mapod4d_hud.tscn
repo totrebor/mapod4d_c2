@@ -1,7 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://ch5b8bd1e1ha2"]
+[gd_scene load_steps=4 format=3 uid="uid://ch5b8bd1e1ha2"]
 
 [ext_resource type="Script" path="res://mapod4d_core/mapod4d_visitor/mapod4d_hud/mapod4d_hud.gd" id="1_gdbq4"]
 [ext_resource type="Script" path="res://mapod4d_core/mapod4d_visitor/mapod4d_hud/view_finder.gd" id="1_vm5tx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gux8h"]
+bg_color = Color(0.376471, 0.376471, 0.376471, 0.196078)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="Mapod4dHud" type="Control"]
 layout_mode = 3
@@ -14,6 +21,7 @@ mouse_filter = 2
 script = ExtResource("1_gdbq4")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -21,10 +29,38 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ViewFinder" type="Control" parent="CenterContainer"]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 960.0
-offset_top = 540.0
-offset_right = 960.0
-offset_bottom = 540.0
+layout_mode = 2
 script = ExtResource("1_vm5tx")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Help" type="PanelContainer" parent="GridContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gux8h")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer/MarginContainer/VBoxContainer/Help"]
+layout_mode = 2
+
+[node name="InfoTexture" type="TextureRect" parent="GridContainer/MarginContainer/VBoxContainer/Help/HBoxContainer"]
+layout_mode = 2
+
+[node name="Info" type="Label" parent="GridContainer/MarginContainer/VBoxContainer/Help/HBoxContainer"]
+layout_mode = 2
+text = "Per richiamare il menu principale"
