@@ -48,6 +48,11 @@ extends CharacterBody3D
 
 # ----- private variables
 var _debug = 0
+var _intEFlag := false
+var _intRFlag := false
+var _do_interaction_e := false
+var _do_interaction_r := false
+var _colliding_object = null
 
 # ----- onready variables
 @onready var _input_rotation_vector = Vector2(0, 0)
@@ -61,6 +66,8 @@ var _debug = 0
 @onready var _mapod_visitor := $Mapod/MapodVisitor
 @onready var _ray_cast = $RotationHelper/Camera3d/RayCast3D
 @onready var _hud := $Hud
+@onready var _bounce_interact_e = $BounceInteractE
+@onready var _bounce_interact_r = $BounceInteractR
 @onready var _keyboard_status = {
 	"rotate_right" = false,
 	"rotate_left" = false,
@@ -72,6 +79,8 @@ var _debug = 0
 	"right" = false,
 	"up" = false,
 	"down" = false,
+	"interaction_e" = false,
+	"interaction_r" = false
 }
 @onready var _joypad_values = {
 }
@@ -147,20 +156,41 @@ func _physics_process(delta):
 		if object is Mapod4dObjectStatic:
 #			print("COLL " + str(_debug))
 			_debug = _debug + 1
+			_colliding_object = object
 			var internal_object = object.get_object()
 			if internal_object.intE == true:
 #				print("enableIntE()")
+				_intEFlag = true
 				_hud.enableIntE()
 			else:
-				print("disableIntE()")
-#				_hud.disableIntE()
+#				print("disableIntE()")
+				_intEFlag = false
+				_hud.disableIntE()
 			if internal_object.intR == true:
 #				print("enableIntR()")
+				_intRFlag = true
 				_hud.enableIntR()
 			else:
 #				print("disableIntR()")
+				_intRFlag = false
 				_hud.disableIntR()
+
+			# interaction phase
+			if _intEFlag == true:
+				if _do_interaction_e == true:
+					_do_interaction_e = false
+					if _bounce_interact_e.is_stopped() == true:
+						print("E " + str(_debug)) # do interaction e
+						_bounce_interact_e.start(1.0)
+			if _intRFlag == true:
+				if _do_interaction_r == true:
+					_do_interaction_r = false
+					if _bounce_interact_r.is_stopped() == true:
+						print("R " + str(_debug)) # do interaction e
+						_bounce_interact_r.start(1.0)
 	else:
+		_intEFlag = false
+		_intRFlag = false
 		_hud.disableIntE()
 		_hud.disableIntR()
 
@@ -218,6 +248,16 @@ func _unhandled_input(event):
 			elif event.is_action_released("mapod4d_down"):
 				_keyboard_status.down = false
 
+			if event.is_action_pressed("mapod4d_int_e"):
+				_keyboard_status.interaction_e = true
+			elif event.is_action_released("mapod4d_int_e"):
+				_keyboard_status.interaction_e = false
+			
+			if event.is_action_pressed("mapod4d_int_r"):
+				_keyboard_status.interaction_r = true
+			elif event.is_action_released("mapod4d_int_r"):
+				_keyboard_status.interaction_r = false
+
 		elif event is InputEventMouseMotion:
 			_input_rotation_vector = event.relative
 #			print(str(event))
@@ -251,6 +291,10 @@ func _elab_keyboard():
 		_input_up_speed = 1
 	if _keyboard_status.down == true:
 		_input_up_speed = -1
+	if _keyboard_status.interaction_e == true:
+		_do_interaction_e = true
+	if _keyboard_status.interaction_r == true:
+		_do_interaction_r = true
 
 
 func _elab_joypad():

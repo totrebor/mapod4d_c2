@@ -1,11 +1,9 @@
 # tool
-@tool
 
 # class_name
-class_name Mapod4dObjectStatic
 
 # extends
-extends StaticBody3D
+extends Mapod4dObjectStatic
 
 ## A brief description of your script.
 ##
@@ -22,10 +20,8 @@ extends StaticBody3D
 # ----- constants
 
 # ----- exported variables
-@export_multiline var information: String = ""
 
 # ----- public variables
-@onready var internal_object := $Object
 
 # ----- private variables
 
@@ -38,23 +34,15 @@ extends StaticBody3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if internal_object != null:
-		internal_object.information = information
+	pass # Replace with function body.
 
 # ----- remaining built-in virtual methods
 
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass # Replace with function body.
+
 # ----- public methods
-
-func get_object():
-	return internal_object
-
-
-func interactionE():
-	return null 
-
-
-func interactionR():
-	return null
 
 # ----- private methods
 
