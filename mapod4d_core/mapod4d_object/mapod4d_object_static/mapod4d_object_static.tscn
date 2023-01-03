@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctyeh2pkqk84a"]
+
+[ext_resource type="Script" path="res://mapod4d_core/mapod4d_object/mapod4d_object_static/mapod4d_object_static.gd" id="1_n5ydq"]
+[ext_resource type="PackedScene" uid="uid://c7aku7jcnjlas" path="res://mapod4d_core/mapod4d_object/mapod4d_object.tscn" id="2_w6hjq"]
+
+[node name="Mapod4dObjectStatic" type="StaticBody3D"]
+collision_layer = 3
+collision_mask = 2
+script = ExtResource("1_n5ydq")
+
+[node name="Object" parent="." instance=ExtResource("2_w6hjq")]

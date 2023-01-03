@@ -19,6 +19,12 @@ extends Control
 signal m4d_scene_npb_requested(scene_name: String, fullscreen_flag: bool)
 ## request scene whith progressbar
 signal m4d_scene_requested(scene_name: String, fullscreen_flag: bool)
+## request metaverse whith progressbar
+signal m4d_metaverse_requested(
+		metaverse_res_path: String, fullscreen_flag: bool)
+## request planet whith progressbar
+signal m4d_planet_requested(
+		metaverse_res_path: String, planet_name: String, fullscreen_flag: bool)
 
 # ----- enums
 

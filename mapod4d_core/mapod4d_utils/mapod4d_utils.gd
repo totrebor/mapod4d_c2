@@ -26,7 +26,8 @@ enum MAPOD4D_METAVERSE_LOCATION {
 # ----- constants
 const MAPOD4D_METAVERSE_EXT = "ma4d"
 const TEMPL_DIR = "res://mapod4d_templates/"
-const TEMPL_METAVERESE = "mapod_4d_templ_metaverse.tscn"
+const TEMPL_METAVERESE = "mapod4d_templ_metaverse.tscn"
+const TEMPL_LIST_OF_PLANET = "mapod4d_templ_list_of_planets.tres"
 
 # ----- exported variables
 
@@ -40,6 +41,7 @@ var _metaverse_scene_path = ""
 var _metaverse_data_path = ""
 var _metaverse_dir_assets = ""
 var _metaverse_dir_tamt = ""
+var _metaverse_dir_planets = ""
 
 # ----- onready variables
 
@@ -75,6 +77,7 @@ func set_current_metaverse_paths(metaverse_id):
 	_metaverse_data_path = _metaverse_dir + "/" + metaverse_id + ".ma4d"
 	_metaverse_dir_assets = _metaverse_dir + "/" + "assets"
 	_metaverse_dir_tamt = _metaverse_dir + "/" + "tamt"
+	_metaverse_dir_planets = _metaverse_dir + "/" + "planets"
 
 
 func get_metaverse_scene_path(
@@ -160,14 +163,19 @@ func metaverse_scaffold(
 				file = null
 			dir.make_dir(_metaverse_dir_assets)
 			dir.make_dir(_metaverse_dir_tamt)
+			dir.make_dir(_metaverse_dir_planets)
 			var metaverse_name = metaverse_id.substr(0,1).to_upper()
 			metaverse_name += metaverse_id.substr(1)
 			if _save_templ_scene(
 					TEMPL_METAVERESE,
 					_metaverse_dir + "/" + metaverse_id + ".tscn", 
 					metaverse_name):
-				ret_val.scenes_list.push_front(_metaverse_dir)
-			ret_val.response = true
+				if _save_templ_list_of_planets(
+					TEMPL_LIST_OF_PLANET,
+					_metaverse_dir + "/list_of_planets.tres",
+				):
+					ret_val.scenes_list.push_front(_metaverse_dir)
+					ret_val.response = true
 		else:
 			printerr("Metaverse directory already exists")
 	return ret_val
@@ -206,7 +214,7 @@ func planet_scaffold(
 		_location: MAPOD4D_METAVERSE_LOCATION,
 		_metaverse_id: String,
 		_planet_id,
-		_planet_type: Mapod4dPlanet.MAPOD4D_PLANET_TYPE):
+		_planet_type: Mapod4dPlanetCoreRes.MAPOD4D_PLANET_TYPE):
 	pass
 
 
@@ -251,21 +259,33 @@ func _save_templ_scene(
 		source_name: String, dest_path: String, root_node_name: String):
 	var ret_val = false
 	if ResourceLoader.exists(TEMPL_DIR + source_name, "PackedScene"):
-		print("1")
 		var lscene: PackedScene = load(TEMPL_DIR + source_name)
-		print("2")
 		var node : Node = lscene.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)
-		print("3")
 		node.set_name(root_node_name)
-		print("4")
 		var scene: PackedScene = PackedScene.new()
-		print("5")
 		scene.pack(node)
-		print("6")
 		var error = ResourceSaver.save(scene, dest_path)
-		print(dest_path + " 7")
 		if error != OK:
 			push_error("An error occurred while saving the scene to disk.")
+		else:
+			ret_val = true
+	else:
+		printerr(TEMPL_DIR + source_name + " not found")
+	return ret_val
+
+
+## load res template list_of_planets
+## save new res
+func _save_templ_list_of_planets(
+		source_name: String, dest_path: String):
+	var ret_val = false
+#	if ResourceLoader.exists(
+#		TEMPL_DIR + source_name, "Mapod4dListOfPlanetsRes"):
+	if ResourceLoader.exists(TEMPL_DIR + source_name):
+		var res: Mapod4dListOfPlanetsRes = load(TEMPL_DIR + source_name)
+		var error = ResourceSaver.save(res, dest_path)
+		if error != OK:
+			push_error("An error occurred while saving the res to disk.")
 		else:
 			ret_val = true
 	else:

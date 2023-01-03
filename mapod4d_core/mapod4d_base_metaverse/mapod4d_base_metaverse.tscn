@@ -36,6 +36,8 @@ emission_energy_multiplier = 16.0
 [node name="Mapod4dBaseMetaverse" type="Node3D"]
 script = ExtResource("1_pufkr")
 
+[node name="MapodArea" type="Node3D" parent="."]
+
 [node name="MetaveseEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_0opfj")
 
@@ -47,8 +49,6 @@ radius = 1.0
 radial_segments = 100
 rings = 100
 material = SubResource("StandardMaterial3D_qllnu")
-
-[node name="MapodArea" type="Node" parent="."]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)

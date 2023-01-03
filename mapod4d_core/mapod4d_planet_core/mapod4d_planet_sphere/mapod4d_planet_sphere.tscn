@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1x50m0vogbgt"]
+
+[ext_resource type="Script" path="res://mapod4d_core/mapod4d_planet_core/mapod4d_planet_sphere/mapod4d_planet_sphere.gd" id="1_vqxop"]
+
+[node name="Mapo4dPlanetSphere" type="Node3D"]
+script = ExtResource("1_vqxop")
+
+[node name="MapodArea" type="Node3D" parent="."]
+
+[node name="Center" type="Node3D" parent="."]

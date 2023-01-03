@@ -66,10 +66,10 @@ func _on_list_of_metaverses_selected(metaverse_id):
 
 func _button_enter_into_metaverse_pressed():
 	print("_button_enter_into_metaverse_pressed")
-	var scene_name = _utils.get_metaverse_scene_path(
+	var metaverse_res_path = _utils.get_metaverse_scene_path(
 			_metaverse_info.location, _metaverse_info.id)
-	print(scene_name)
-	emit_signal("m4d_scene_requested", scene_name, true)
+	print(metaverse_res_path)
+	emit_signal("m4d_metaverse_requested", metaverse_res_path, true)
 
 
 func _on_button_main_exit_pressed():
