@@ -27,6 +27,12 @@ signal m4d_planet_requested(
 		metaverse_res_path: String, planet_name: String, fullscreen_flag: bool)
 
 # ----- enums
+enum MAPOD_STATUS {
+	MPD_QUIET = 0,
+	MPD_MOVING,
+	MPD_INTERACTION,
+	MPD_FREEZED,
+}
 
 # ----- constants
 
@@ -57,7 +63,7 @@ signal m4d_planet_requested(
 # ----- public variables
 
 # ----- private variables
-var _debug = 0
+var _status := MAPOD_STATUS.MPD_QUIET
 var _intEFlag := false
 var _intRFlag := false
 var _do_interaction_e := false
@@ -102,7 +108,10 @@ var _colliding_object = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Input.use_accumulated_input = false
+	if mapod4dAutoload.mapod4d_debug == false:
+		_hud.disable_debug()
 	_camera.current = current_camera_flag
+	set_status(MAPOD_STATUS.MPD_QUIET)
 
 
 # ----- remaining built-in virtual methods
@@ -126,7 +135,18 @@ func _handle_tick(delta):
 			_input_right_speed * right_speed_multi, local_right_speed, delta * coef_vel_reduc)
 	local_up_speed = lerp(
 			_input_up_speed * up_speed_multi, local_up_speed, delta * coef_vel_reduc)
-
+	## trunc
+	if abs(local_forward_speed) < 0.1:
+		local_forward_speed = 0.0
+	if abs(local_right_speed) < 0.1:
+		local_right_speed = 0.0
+	if abs(local_up_speed) < 0.1:
+		local_up_speed = 0.0
+	if abs(local_rotation.x) < 0.1:
+		local_rotation.x = 0.0
+	if abs(local_rotation.y) < 0.1:
+		local_rotation.y = 0.0
+		
 	## rotations
 	_rotation_helper.rotate_y(-deg_to_rad(local_rotation.y))
 	_camera.rotate_x(-deg_to_rad(local_rotation.x))
@@ -152,6 +172,19 @@ func _handle_tick(delta):
 	_input_right_speed = local_right_speed
 	_input_up_speed = local_up_speed
 
+	## status configuration
+	var moving_linear = abs(local_forward_speed)
+	moving_linear = moving_linear + abs(local_up_speed)
+	moving_linear = moving_linear + abs(local_right_speed)
+	var moving_rotation = abs(local_rotation.length())
+	if moving_linear + moving_rotation > 0:
+		set_status(MAPOD_STATUS.MPD_MOVING)
+	else:
+		set_status(MAPOD_STATUS.MPD_QUIET)
+#	mapod4d_print(
+#			"ML " + str(moving_linear) + " MR " + \
+#			str(moving_rotation) + " ST " + str(_status))
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -159,49 +192,51 @@ func _process(_delta):
 
 
 func _physics_process(delta):
-	_handle_tick(delta)
+	if _status != MAPOD_STATUS.MPD_FREEZED:
+		_handle_tick(delta)
 	if _ray_cast.is_colliding():
 #		print("colliding")
 		var object = _ray_cast.get_collider()
 		if object is Mapod4dObjectStatic:
-#			print("COLL " + str(_debug))
-			_debug = _debug + 1
+#			mapod4dAutoload.mapod4d_print("COLLIDING")
 			_colliding_object = object
 			var internal_object = object.get_object()
 			if internal_object.intE == true:
-#				print("enableIntE()")
+#				mapod4dAutoload.mapod4d_print("enableIntE()")
 				_intEFlag = true
-				_hud.enableIntE()
+				_hud.enable_int_e()
 			else:
-#				print("disableIntE()")
+#				mapod4dAutoload.mapod4d_print("disableIntE()")
 				_intEFlag = false
-				_hud.disableIntE()
+				_hud.disable_int_e()
 			if internal_object.intR == true:
-#				print("enableIntR()")
+#				mapod4dAutoload.mapod4d_print("enableIntR()")
 				_intRFlag = true
-				_hud.enableIntR()
+				_hud.enable_int_r()
 			else:
-#				print("disableIntR()")
+#				mapod4dAutoload.mapod4d_print("disableIntR()")
 				_intRFlag = false
-				_hud.disableIntR()
+				_hud.disable_int_r()
 
 			# interaction phase
 			if _intEFlag == true:
 				if _do_interaction_e == true:
 					_do_interaction_e = false
 					if _bounce_interact_e.is_stopped() == true:
-						print("E " + str(_debug)) # do interaction 
-						_colliding_object.interactionE()
+						set_status(MAPOD_STATUS.MPD_INTERACTION)
+						mapod4dAutoload.mapod4d_print("E") # do interaction 
+						_colliding_object.interaction_e()
 						## end of interaction
 						if _colliding_object.internal_object.request_check():
 							_handle_object_request()
 						_bounce_interact_e.start(1.0)
+						next_status()
 			if _intRFlag == true:
 				if _do_interaction_r == true:
 					_do_interaction_r = false
 					if _bounce_interact_r.is_stopped() == true:
-						print("R " + str(_debug)) # do interaction e
-						_colliding_object.interactionR()
+						mapod4dAutoload.mapod4d_print("R") # do interaction
+						_colliding_object.interaction_r()
 						## end of interaction
 						if _colliding_object.internal_object.request_check():
 							_handle_object_request()
@@ -209,12 +244,14 @@ func _physics_process(delta):
 	else:
 		_intEFlag = false
 		_intRFlag = false
-		_hud.disableIntE()
-		_hud.disableIntR()
+		_hud.disable_int_e()
+		_hud.disable_int_r()
 
 
 func _unhandled_input(event):
-	if input_disabled_flag == false:
+	if (input_disabled_flag == false) and \
+	(_status != MAPOD_STATUS.MPD_INTERACTION) and \
+	(_status != MAPOD_STATUS.MPD_FREEZED):
 		if event is InputEventKey:
 			if event.is_action_pressed("mapod4d_rotate_right"):
 				_keyboard_status.rotate_right = true
@@ -340,6 +377,35 @@ func _handle_object_request():
 			)
 
 # ----- public methods
+
+func set_status(p_status: MAPOD_STATUS):
+	match(p_status):
+		MAPOD_STATUS.MPD_QUIET:
+			_status = MAPOD_STATUS.MPD_QUIET
+		MAPOD_STATUS.MPD_MOVING:
+			_status = MAPOD_STATUS.MPD_MOVING
+		MAPOD_STATUS.MPD_INTERACTION:
+			_status = MAPOD_STATUS.MPD_INTERACTION
+		MAPOD_STATUS.MPD_FREEZED:
+			_status = MAPOD_STATUS.MPD_FREEZED
+			_input_rotation_vector.y = 0.0
+			_input_rotation_vector.x = 0.0
+			_input_forward_speed = 0.0
+			_input_right_speed = 0.0
+			_input_up_speed = 0.0
+	_hud.set_status(_status)
+			
+func next_status():
+	match(_status):
+		MAPOD_STATUS.MPD_QUIET:
+			_status = MAPOD_STATUS.MPD_QUIET
+		MAPOD_STATUS.MPD_MOVING:
+			_status = MAPOD_STATUS.MPD_MOVING
+		MAPOD_STATUS.MPD_INTERACTION:
+			_status = MAPOD_STATUS.MPD_QUIET
+		MAPOD_STATUS.MPD_FREEZED:
+			_status = MAPOD_STATUS.MPD_QUIET
+	_hud.set_status(_status)
 
 # ----- private methods
 

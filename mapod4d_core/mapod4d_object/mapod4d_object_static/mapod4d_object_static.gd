@@ -49,11 +49,11 @@ func get_object():
 	return internal_object
 
 
-func interactionE():
+func interaction_e():
 	pass
 
 
-func interactionR():
+func interaction_r():
 	pass
 
 # ----- private methods

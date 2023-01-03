@@ -27,6 +27,7 @@ extends Control
 # ----- private variables
 @onready var _interactionE = %InteractionE
 @onready var _interactionR = %InteractionR
+@onready var _status = %Status
 
 # ----- onready variables
 
@@ -47,19 +48,28 @@ func _process(delta):
 
 # ----- public methods
 
-func enableIntE():
+func enable_int_e():
 	_interactionE.visible = true
 
 
-func disableIntE():
+func disable_int_e():
 	_interactionE.visible = false
 
 
-func enableIntR():
+func enable_int_r():
 	_interactionR.visible = true
 
 
-func disableIntR():
+func disable_int_r():
 	_interactionR.visible = false
+
+
+func set_status(value):
+	_status.text = str(value)
+
+
+func disable_debug():
+	$GridContainer/DebugLeft.visible = false
+	$GridContainer/DebugRight.visible = false
 
 # ----- private methods

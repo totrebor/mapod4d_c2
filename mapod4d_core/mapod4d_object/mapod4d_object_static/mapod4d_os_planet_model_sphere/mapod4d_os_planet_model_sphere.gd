@@ -44,7 +44,7 @@ func _process(delta):
 	pass # Replace with function body.
 
 # ----- public methods
-func interactionE():
+func interaction_e():
 	internal_object.request.type = Mapod4dObject.OBJREQ.TO_PLANET
 	internal_object.request.arguments["metaverse"] = \
 			"res://mapod4d_multiverse_dev/test/test.tscn"

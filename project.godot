@@ -96,7 +96,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Mapod4dAutoload="*res://mapod4d_core/mapod4d_autoload/mapod4d_autoload.gd"
+mapod4dAutoload="*res://mapod4d_core/mapod4d_autoload/mapod4d_autoload.gd"
 
 [display]
 

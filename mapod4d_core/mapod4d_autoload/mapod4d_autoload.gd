@@ -29,6 +29,8 @@ const MAPOD4D_LOADED_SCENE_NODE_TAG = "LoadedScene"
 # ----- exported variables
 
 # ----- public variables
+var mapod4d_debug = true
+var _prog_debug = 0
 
 # ----- private variables
 var _current_loaded_scene = null
@@ -99,7 +101,16 @@ func _process(_delta):
 # ----- public methods
 
 func im_alive():
-	print("IMA")
+	mapod4d_print("IMA")
+
+
+func mapod4d_print(value):
+	if mapod4d_debug == true:
+		_prog_debug += 1
+		if _prog_debug > 99:
+			_prog_debug = 0
+		print_debug(str(_prog_debug) + " " + str(value))
+	
 
 # ----- private methods
 
@@ -195,7 +206,7 @@ func _load_npb_scene(scene_path):
 					_current_loaded_scene)
 			placeholder.add_child(_current_loaded_scene)
 			#_current_loaded_scene.set_owner(_mapod4d_main)
-			_current_loaded_scene.set_owner(get_node("/root"))
+			_current_loaded_scene.set_owner(placeholder)
 			_attach_current_loaded_scene_signals()
 			ret_val = true
 	return ret_val
@@ -261,9 +272,9 @@ func _load_scene_ended():
 ## load scene no progress bar and update
 ## _current_loaded_scene updated
 func _attach_current_loaded_scene_signals():
-	print_debug("_attach_current_loaded_scene_signals()")
+	mapod4d_print("_attach_current_loaded_scene_signals()")
 	if _current_loaded_scene is Mapod4dBaseUi:
-		print_debug("_current_loaded_scene is Mapod4dBaseUi")
+		mapod4d_print("_current_loaded_scene is Mapod4dBaseUi")
 #		_current_loaded_scene.m4d_scene_requested.connect(
 	#			_on_m4d_scene_requested)
 #		_current_loaded_scene.m4d_scene_npb_requested.connect(
@@ -282,7 +293,7 @@ func _attach_current_loaded_scene_signals():
 func _add_mapod():
 	if (_current_loaded_scene is Mapod4dBaseMetaverse) or \
 	(_current_loaded_scene is Mapod4dPlanetSphere):
-		print_debug("_current_loaded_scene is Mapod4dBaseMetaverse")
+		mapod4d_print("_current_loaded_scene is Mapod4dBaseMetaverse")
 		var place_holder = _current_loaded_scene.get_node_or_null("MapodArea")
 		if place_holder != null:
 			var mapod = _mapod4d_visitor_res.instantiate()
@@ -305,7 +316,7 @@ func _add_mapod():
 ## elaborates signal load new scene 
 ## without the progressbar and the fullscreen flag
 func _on_m4d_scene_npb_requested(scene_res_path, fullscreen_flag):
-	print_debug("_on_scene_npd_requested " + \
+	mapod4d_print("_on_scene_npd_requested " + \
 			scene_res_path + " " + str(fullscreen_flag))
 	_current_metaverse_res_path = ""
 	_current_planet_name = ""
@@ -324,7 +335,7 @@ func _on_m4d_scene_npb_requested(scene_res_path, fullscreen_flag):
 ## elaborates signal load new scene 
 ## with the progressbar and the fullscreen flag
 func _on_m4d_scene_requested(scene_res_path, fullscreen_flag):
-	print_debug("_on_scene_requested " + \
+	mapod4d_print("_on_scene_requested " + \
 			scene_res_path + " " + str(fullscreen_flag))
 	_current_metaverse_res_path = ""
 	_current_planet_name = ""
@@ -344,7 +355,7 @@ func _on_m4d_scene_requested(scene_res_path, fullscreen_flag):
 func _on_m4d_metaverse_requested(metaverse_res_path, fullscreen_flag):
 	_current_metaverse_res_path = metaverse_res_path
 	_current_planet_name = ""
-	print_debug(_current_metaverse_res_path.get_base_dir())
+	mapod4d_print(_current_metaverse_res_path.get_base_dir())
 	if _mapod4d_run_status == MAPOD4D_RUN_STATUS.F6:
 		pass
 	else:
