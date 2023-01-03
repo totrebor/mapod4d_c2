@@ -20,7 +20,6 @@ extends Mapod4dObjectStatic
 # ----- constants
 
 # ----- exported variables
-@export var planet_name: String = ""
 
 # ----- public variables
 
@@ -46,9 +45,9 @@ func _process(delta):
 # ----- public methods
 func interaction_e():
 	internal_object.request.type = Mapod4dObject.OBJREQ.TO_PLANET
-	internal_object.request.arguments["metaverse"] = \
+	internal_object.request.arguments["metaverse_res_path"] = \
 			"res://mapod4d_multiverse_dev/test/test.tscn"
-	internal_object.request.arguments["planet"] = planet_name
+	internal_object.request.arguments["planet_id"] = internal_object.planet_id
 # ----- private methods
 
 

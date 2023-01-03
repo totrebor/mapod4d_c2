@@ -24,7 +24,7 @@ signal m4d_metaverse_requested(
 	metaverse_res_path: String, fullscreen_flag: bool)
 ## request planet whith progressbar
 signal m4d_planet_requested(
-		metaverse_res_path: String, planet_name: String, fullscreen_flag: bool)
+		metaverse_res_path: String, planet_id: String, fullscreen_flag: bool)
 
 # ----- enums
 enum MAPOD_STATUS {
@@ -38,9 +38,16 @@ enum MAPOD_STATUS {
 
 # ----- exported variables
 ## disable input
-@export var input_disabled_flag: bool = true
+@export var input_disabled_flag := true:
+	set(value):
+		input_disabled_flag = value
+		if _hud != null:
+			if value == true:
+				_hud.visible = false
+			else:
+				_hud.visible = true
 ## set current camera
-@export var current_camera_flag: bool = false:
+@export var current_camera_flag := false:
 	## update internal camera
 	set(new_current_camera):
 		current_camera_flag = new_current_camera
@@ -48,15 +55,15 @@ enum MAPOD_STATUS {
 		if camera != null:
 			camera.current = new_current_camera
 ## mouse orizzontal sensitivity
-@export var oriz_mouse_sensitivity: float = 4
+@export var oriz_mouse_sensitivity: float = 4.0
 ## mouse vertical sensitivity
-@export var vert_mouse_sensitivity: float = 4
+@export var vert_mouse_sensitivity: float = 4.0
 ## coefficient of velocity reduction
-@export var coef_vel_reduc: float = 5
+@export var coef_vel_reduc: float = 5.0
 ## forwad speed multiplier
 @export var forward_speed_multi: float = 1.1
 ## right speed multiplier
-@export var right_speed_multi: float = 1
+@export var right_speed_multi: float = 1.0
 ## up speed multiplier
 @export var up_speed_multi: float = 0.5
 
@@ -64,8 +71,10 @@ enum MAPOD_STATUS {
 
 # ----- private variables
 var _status := MAPOD_STATUS.MPD_QUIET
-var _intEFlag := false
-var _intRFlag := false
+## colliding object with interaction e
+var _int_e_flag := false
+## colliding object with interaction r
+var _int_r_flag := false
 var _do_interaction_e := false
 var _do_interaction_r := false
 var _colliding_object = null
@@ -108,10 +117,16 @@ var _colliding_object = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Input.use_accumulated_input = false
-	if mapod4dAutoload.mapod4d_debug == false:
-		_hud.disable_debug()
-	_camera.current = current_camera_flag
 	set_status(MAPOD_STATUS.MPD_QUIET)
+	if _hud != null:
+		if mapod4dAutoload.mapod4d_debug == false:
+			_hud.disable_debug()
+		if input_disabled_flag == true:
+			_hud.visible = false
+		else:
+			_hud.visible = true
+	_camera.current = current_camera_flag
+
 
 
 # ----- remaining built-in virtual methods
@@ -198,54 +213,58 @@ func _physics_process(delta):
 #		print("colliding")
 		var object = _ray_cast.get_collider()
 		if object is Mapod4dObjectStatic:
-#			mapod4dAutoload.mapod4d_print("COLLIDING")
+			mapod4dAutoload.mapod4d_print("COLLIDING")
 			_colliding_object = object
 			var internal_object = object.get_object()
 			if internal_object.intE == true:
-#				mapod4dAutoload.mapod4d_print("enableIntE()")
-				_intEFlag = true
+				mapod4dAutoload.mapod4d_print("enableIntE()")
+				_int_e_flag = true
 				_hud.enable_int_e()
 			else:
-#				mapod4dAutoload.mapod4d_print("disableIntE()")
-				_intEFlag = false
+				mapod4dAutoload.mapod4d_print("disableIntE()")
+				_int_e_flag = false
 				_hud.disable_int_e()
 			if internal_object.intR == true:
-#				mapod4dAutoload.mapod4d_print("enableIntR()")
-				_intRFlag = true
+				mapod4dAutoload.mapod4d_print("enableIntR()")
+				_int_r_flag = true
 				_hud.enable_int_r()
 			else:
-#				mapod4dAutoload.mapod4d_print("disableIntR()")
-				_intRFlag = false
+				mapod4dAutoload.mapod4d_print("disableIntR()")
+				_int_r_flag = false
 				_hud.disable_int_r()
 
 			# interaction phase
-			if _intEFlag == true:
+			if _int_e_flag == true:
 				if _do_interaction_e == true:
 					_do_interaction_e = false
 					if _bounce_interact_e.is_stopped() == true:
 						set_status(MAPOD_STATUS.MPD_INTERACTION)
-						mapod4dAutoload.mapod4d_print("E") # do interaction 
+						mapod4dAutoload.mapod4d_print("E before")
 						_colliding_object.interaction_e()
+						mapod4dAutoload.mapod4d_print("E after")
 						## end of interaction
 						if _colliding_object.internal_object.request_check():
 							_handle_object_request()
 						_bounce_interact_e.start(1.0)
 						next_status()
-			if _intRFlag == true:
+			if _int_r_flag == true:
 				if _do_interaction_r == true:
 					_do_interaction_r = false
 					if _bounce_interact_r.is_stopped() == true:
-						mapod4dAutoload.mapod4d_print("R") # do interaction
+						mapod4dAutoload.mapod4d_print("R before")
 						_colliding_object.interaction_r()
+						mapod4dAutoload.mapod4d_print("R after")
 						## end of interaction
 						if _colliding_object.internal_object.request_check():
 							_handle_object_request()
 						_bounce_interact_r.start(1.0)
 	else:
-		_intEFlag = false
-		_intRFlag = false
+		_int_e_flag = false
+		_int_r_flag = false
 		_hud.disable_int_e()
 		_hud.disable_int_r()
+		mapod4dAutoload.mapod4d_print("disableIntE()")
+		mapod4dAutoload.mapod4d_print("disableIntR()")
 
 
 func _unhandled_input(event):
@@ -304,12 +323,14 @@ func _unhandled_input(event):
 				_keyboard_status.down = false
 
 			if event.is_action_pressed("mapod4d_int_e"):
-				_keyboard_status.interaction_e = true
+				if _int_e_flag == true:
+					_keyboard_status.interaction_e = true
 			elif event.is_action_released("mapod4d_int_e"):
 				_keyboard_status.interaction_e = false
 			
 			if event.is_action_pressed("mapod4d_int_r"):
-				_keyboard_status.interaction_r = true
+				if _int_r_flag == true:
+					_keyboard_status.interaction_r = true
 			elif event.is_action_released("mapod4d_int_r"):
 				_keyboard_status.interaction_r = false
 
@@ -365,14 +386,14 @@ func _handle_object_request():
 		Mapod4dObject.OBJREQ.TO_METAVERSE:
 			emit_signal(
 				"m4d_metaverse_requested",
-				arguments["metaverse"],
+				arguments["metaverse_res_path"],
 				true
 			)
 		Mapod4dObject.OBJREQ.TO_PLANET:
 			emit_signal(
 				"m4d_planet_requested",
-				arguments["metaverse"],
-				arguments["planet"],
+				arguments["metaverse_res_path"],
+				arguments["planet_id"],
 				true
 			)
 

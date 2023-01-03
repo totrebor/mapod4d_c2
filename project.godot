@@ -34,7 +34,7 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://mapod4d_core/mapod4d_main/mapod4d_main.gd"
 }, {
-"base": "Node",
+"base": "Object",
 "class": &"Mapod4dObject",
 "language": &"GDScript",
 "path": "res://mapod4d_core/mapod4d_object/mapod4d_object.gd"

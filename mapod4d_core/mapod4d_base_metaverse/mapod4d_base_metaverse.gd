@@ -48,11 +48,12 @@ var _metaverse_id = null
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	_metaverse_id = str(name).to_lower()
-	var list_of_planets_path = _utils.get_metaverse_element_path(
+	var list_of_planets_path = _utils.get_metaverse_element_res_path(
 			location, _metaverse_id, "list_of_planets.tres"
 	)
 	_list_of_planets = load(list_of_planets_path)
-	print_debug("DEBUG Planets " + str(_list_of_planets.list.size()))
+	mapod4dAutoload.mapod4d_print(
+			"DEBUG Planets " + str(_list_of_planets.list.size()))
 	var placeolder = get_node_or_null("Planets")
 	if placeolder != null:
 		var x_pos = 0.0
@@ -60,7 +61,9 @@ func _ready():
 		for planet_data in _list_of_planets.list:
 			if planet_data is Mapod4dPlanetCoreRes:
 				var planet = planet_sphere_res.instantiate()
-				planet.planet_name = planet_data.id
+				planet.internal_object.planet_id = planet_data.id
+				planet.internal_object.metaverse_res_path = \
+						_utils.get_metaverse_res_path(location, _metaverse_id)
 				planet.set_name(planet_data.id)
 				planet.set_position(Vector3(x_pos, 0, z_pos))
 				z_pos = z_pos - (1.5 + (1.0 / (1.0 + x_pos)))

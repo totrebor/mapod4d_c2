@@ -25,7 +25,7 @@ extends StaticBody3D
 @export_multiline var information: String = ""
 
 # ----- public variables
-@onready var internal_object := $Object
+var internal_object := Mapod4dObject.new()
 
 # ----- private variables
 

@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7aku7jcnjlas"]
-
-[ext_resource type="Script" path="res://mapod4d_core/mapod4d_object/mapod4d_object.gd" id="1_hoh4p"]
-
-[node name="Mapod4dObject" type="Node"]
-script = ExtResource("1_hoh4p")

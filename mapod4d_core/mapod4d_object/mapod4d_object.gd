@@ -4,7 +4,7 @@
 class_name Mapod4dObject
 
 # extends
-extends Node
+extends Object
 
 ## A brief description of your script.
 ##
@@ -48,6 +48,8 @@ var request = {
 	"type": OBJREQ.NONE,
 	"arguments": {}
 }
+var metaverse_res_path := ""
+var planet_id := ""
 
 # ----- private variables
 
@@ -59,8 +61,8 @@ var request = {
 # ----- built-in virtual _ready method
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	pass
+#func _ready():
+#	pass
 
 # ----- remaining built-in virtual methods
 
@@ -80,18 +82,13 @@ func request_check():
 		OBJREQ.TO_MAINMENU:
 			ret_val = true
 		OBJREQ.TO_METAVERSE:
-			if request.arguments.has("metaverse"):
+			if request.arguments.has("metaverse_res_path"):
 				ret_val = true
 		OBJREQ.TO_PLANET:
-			if request.arguments.has("metaverse"):
-				if request.arguments.has("planet"):
+			if request.arguments.has("metaverse_res_path"):
+				if request.arguments.has("planet_id"):
 					ret_val = true
 	return ret_val
 
 
 # ----- private methods
-
-
-
-
-

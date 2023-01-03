@@ -109,7 +109,8 @@ func mapod4d_print(value):
 		_prog_debug += 1
 		if _prog_debug > 99:
 			_prog_debug = 0
-		print_debug(str(_prog_debug) + " " + str(value))
+		print(str(_prog_debug) + " " + str(value))
+		print(str(_prog_debug) + " " + str(get_stack()[1]))
 	
 
 # ----- private methods

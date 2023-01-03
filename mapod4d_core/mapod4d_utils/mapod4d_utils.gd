@@ -80,13 +80,13 @@ func set_current_metaverse_paths(metaverse_id):
 	_metaverse_dir_planets = _metaverse_dir + "/" + "planets"
 
 
-func get_metaverse_scene_path(
+func get_metaverse_res_path(
 		location: MAPOD4D_METAVERSE_LOCATION, metaverse_id: String):
 	_current_location = get_multiverse_location(location)
 	set_current_metaverse_paths(metaverse_id)
 	return _metaverse_scene_path
 
-func get_metaverse_element_path(
+func get_metaverse_element_res_path(
 		location: MAPOD4D_METAVERSE_LOCATION,
 		metaverse_id: String, element_name: String):
 	_current_location = get_multiverse_location(location)
