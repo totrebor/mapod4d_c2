@@ -118,6 +118,8 @@ var _colliding_object = null
 func _ready():
 	Input.use_accumulated_input = false
 	set_status(MAPOD_STATUS.MPD_QUIET)
+	_hud.set_speed(0)
+	_hud.set_altitude(0)
 	if _hud != null:
 		if mapod4dAutoload.mapod4d_debug == false:
 			_hud.disable_debug()
@@ -265,6 +267,14 @@ func _physics_process(delta):
 		_hud.disable_int_r()
 		mapod4dAutoload.mapod4d_print("disableIntE()")
 		mapod4dAutoload.mapod4d_print("disableIntR()")
+	
+	var speed = Vector3(
+			_input_right_speed,_input_up_speed, _input_forward_speed)
+	speed = floor(abs(speed.length() * 100.0))
+	_hud.set_speed(speed)
+	var altitude = floor(global_transform.origin.y * 100.0)
+	altitude = float(altitude) / 100.0
+	_hud.set_altitude(altitude)
 
 
 func _unhandled_input(event):

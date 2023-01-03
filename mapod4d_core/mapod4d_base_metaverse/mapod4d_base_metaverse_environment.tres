@@ -1,0 +1,24 @@
+[gd_resource type="Environment" load_steps=4 format=3 uid="uid://c5r0toxf3n135"]
+
+[ext_resource type="Texture2D" uid="uid://63cdiho7f3kb" path="res://assets/img/metaverse.png" id="1_y78yv"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hluec"]
+panorama = ExtResource("1_y78yv")
+
+[sub_resource type="Sky" id="Sky_ed0v6"]
+sky_material = SubResource("PanoramaSkyMaterial_hluec")
+
+[resource]
+background_mode = 2
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_ed0v6")
+ambient_light_source = 1
+ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.0
+reflected_light_source = 2
+tonemap_mode = 3
+fog_light_energy = 0.0
+volumetric_fog_density = 0.08
+volumetric_fog_sky_affect = 0.094
+adjustment_enabled = true
+adjustment_brightness = 2.51

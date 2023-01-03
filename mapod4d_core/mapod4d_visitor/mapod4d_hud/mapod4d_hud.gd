@@ -27,6 +27,8 @@ extends Control
 # ----- private variables
 @onready var _interactionE = %InteractionE
 @onready var _interactionR = %InteractionR
+@onready var _speed = %SpeedData
+@onready var _altitude = %AltitudeData
 @onready var _status = %Status
 
 # ----- onready variables
@@ -62,6 +64,14 @@ func enable_int_r():
 
 func disable_int_r():
 	_interactionR.visible = false
+
+
+func set_speed(value):
+	_speed.text = str(value)
+
+
+func set_altitude(value):
+	_altitude.text = str(value) + "m"
 
 
 func set_status(value):
