@@ -25,7 +25,7 @@ extends Object
 
 
 # ----- private variables
-var _core_data: Mapod4dPlanetCoreRes
+var _core_data: Mapod4dPlanetCoreRes = Mapod4dPlanetCoreRes.new()
 
 # ----- public methods
 

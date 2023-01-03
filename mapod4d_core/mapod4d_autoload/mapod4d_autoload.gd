@@ -280,7 +280,8 @@ func _attach_current_loaded_scene_signals():
 
 # add mapod (visitor)
 func _add_mapod():
-	if _current_loaded_scene is Mapod4dBaseMetaverse:
+	if (_current_loaded_scene is Mapod4dBaseMetaverse) or \
+	(_current_loaded_scene is Mapod4dPlanetSphere):
 		print_debug("_current_loaded_scene is Mapod4dBaseMetaverse")
 		var place_holder = _current_loaded_scene.get_node_or_null("MapodArea")
 		if place_holder != null:
@@ -299,8 +300,6 @@ func _add_mapod():
 					_on_m4d_metaverse_requested, CONNECT_DEFERRED)
 			mapod.m4d_planet_requested.connect(
 					_on_m4d_planet_requested, CONNECT_DEFERRED)
-#	elif _current_loaded_scene is Mapod4dSpherePlanet:
-#		print("_current_loaded_scene is Mapod4dSpherePlanet")
 
 
 ## elaborates signal load new scene 

@@ -2,6 +2,7 @@
 
 # class_name
 class_name Mapod4dPlanetSphere
+
 # extends
 extends Node3D
 
@@ -41,7 +42,7 @@ var metaverse = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	core = Mapod4dPlanetCore.new()
-	core.setCoreType(Mapod4dPlanetCoreRes.MAPOD4D_PLANET_TYPE.SPHERE)
+	core.setPlanetType(Mapod4dPlanetCoreRes.MAPOD4D_PLANET_TYPE.MPT_SPHERE)
 
 # ----- remaining built-in virtual methods
 
