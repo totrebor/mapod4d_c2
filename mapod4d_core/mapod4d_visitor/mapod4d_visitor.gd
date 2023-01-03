@@ -24,8 +24,7 @@ signal m4d_metaverse_requested(
 	metaverse_res_path: String, fullscreen_flag: bool)
 ## request planet whith progressbar
 signal m4d_planet_requested(
-		metaverse_res_path: String, 
-		planet_res_path: String, fullscreen_flag: bool)
+		metaverse_res_path: String, planet_name: String, fullscreen_flag: bool)
 
 # ----- enums
 
@@ -191,13 +190,21 @@ func _physics_process(delta):
 				if _do_interaction_e == true:
 					_do_interaction_e = false
 					if _bounce_interact_e.is_stopped() == true:
-						print("E " + str(_debug)) # do interaction e
+						print("E " + str(_debug)) # do interaction 
+						_colliding_object.interactionE()
+						## end of interaction
+						if _colliding_object.internal_object.request_check():
+							_handle_object_request()
 						_bounce_interact_e.start(1.0)
 			if _intRFlag == true:
 				if _do_interaction_r == true:
 					_do_interaction_r = false
 					if _bounce_interact_r.is_stopped() == true:
 						print("R " + str(_debug)) # do interaction e
+						_colliding_object.interactionR()
+						## end of interaction
+						if _colliding_object.internal_object.request_check():
+							_handle_object_request()
 						_bounce_interact_r.start(1.0)
 	else:
 		_intEFlag = false
@@ -311,12 +318,28 @@ func _elab_keyboard():
 func _elab_joypad():
 	pass
 
+func _handle_object_request():
+	var arguments = _colliding_object.internal_object.request.arguments
+	match(_colliding_object.internal_object.request.type):
+		Mapod4dObject.OBJREQ.NONE:
+			pass
+		Mapod4dObject.OBJREQ.TO_MAINMENU:
+			pass
+		Mapod4dObject.OBJREQ.TO_METAVERSE:
+			emit_signal(
+				"m4d_metaverse_requested",
+				arguments["metaverse"],
+				true
+			)
+		Mapod4dObject.OBJREQ.TO_PLANET:
+			emit_signal(
+				"m4d_planet_requested",
+				arguments["metaverse"],
+				arguments["planet"],
+				true
+			)
 
 # ----- public methods
 
 # ----- private methods
-
-
-
-
 

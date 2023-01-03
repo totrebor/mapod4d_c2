@@ -50,11 +50,11 @@ func get_object():
 
 
 func interactionE():
-	return null 
+	pass
 
 
 func interactionR():
-	return null
+	pass
 
 # ----- private methods
 

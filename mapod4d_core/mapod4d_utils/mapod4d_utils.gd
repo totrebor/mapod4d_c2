@@ -27,7 +27,7 @@ enum MAPOD4D_METAVERSE_LOCATION {
 const MAPOD4D_METAVERSE_EXT = "ma4d"
 const TEMPL_DIR = "res://mapod4d_templates/"
 const TEMPL_METAVERESE = "mapod4d_templ_metaverse.tscn"
-const TEMPL_LIST_OF_PLANET = "mapod4d_templ_list_of_planets.res"
+const TEMPL_LIST_OF_PLANET = "mapod4d_templ_list_of_planets.tres"
 
 # ----- exported variables
 
@@ -172,7 +172,7 @@ func metaverse_scaffold(
 					metaverse_name):
 				if _save_templ_list_of_planets(
 					TEMPL_LIST_OF_PLANET,
-					_metaverse_dir + "/list_of_planets.res",
+					_metaverse_dir + "/list_of_planets.tres",
 				):
 					ret_val.scenes_list.push_front(_metaverse_dir)
 					ret_val.response = true

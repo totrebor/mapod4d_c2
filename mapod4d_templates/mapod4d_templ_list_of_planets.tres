@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://mijb57hepi6y"]
+
+[ext_resource type="Script" path="res://mapod4d_core/mapod4d_base_metaverse/mapod4d_list_of_planets.gd" id="1_was50"]
+
+[resource]
+script = ExtResource("1_was50")
+list = []

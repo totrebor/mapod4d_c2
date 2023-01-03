@@ -17,6 +17,12 @@ extends Node
 # ----- signals
 
 # ----- enums
+enum OBJREQ {
+	NONE = 0,
+	TO_MAINMENU,
+	TO_METAVERSE,
+	TO_PLANET,
+}
 
 # ----- constants
 
@@ -24,7 +30,7 @@ extends Node
 
 # ----- public variables
 
-# object description
+## object description
 var information: String = "object":
 	get:
 		return information
@@ -33,10 +39,15 @@ var information: String = "object":
 			information = "object"
 		else:
 			information = value
-# interaction type E
+## interaction type E
 var intE := true
-# interaction type R
+## interaction type R
 var intR := false
+##
+var request = {
+	"type": OBJREQ.NONE,
+	"arguments": {}
+}
 
 # ----- private variables
 
@@ -49,11 +60,33 @@ var intR := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("ssdasdwedewdwedwe")
+	pass
 
 # ----- remaining built-in virtual methods
 
 # ----- public methods
+
+## reset the request
+func reset_request():
+	request.type = OBJREQ.NONE
+	request.argument = {}
+
+## check if request is correct
+func request_check():
+	var ret_val = false
+	match(request.type):
+		OBJREQ.NONE:
+			ret_val = true
+		OBJREQ.TO_MAINMENU:
+			ret_val = true
+		OBJREQ.TO_METAVERSE:
+			if request.arguments.has("metaverse"):
+				ret_val = true
+		OBJREQ.TO_PLANET:
+			if request.arguments.has("metaverse"):
+				if request.arguments.has("planet"):
+					ret_val = true
+	return ret_val
 
 
 # ----- private methods
