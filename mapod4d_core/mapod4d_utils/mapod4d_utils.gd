@@ -218,6 +218,14 @@ func planet_scaffold(
 	pass
 
 
+func get_planet_res_path(metaverse_res_path, planet_id):
+	var planet_res_path = metaverse_res_path.get_base_dir()
+	planet_res_path = planet_res_path + "/planets"
+	planet_res_path = planet_res_path + "/" + planet_id
+	planet_res_path = planet_res_path + "/" + planet_id + ".tscn"
+	return planet_res_path
+
+
 ## read all desktop metaverse for main menu itemlist
 func metaverse_main_menu_list_read(destination: ItemList):
 	var ret_val = false

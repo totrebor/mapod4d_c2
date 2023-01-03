@@ -39,15 +39,18 @@ func _ready():
 # ----- remaining built-in virtual methods
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass # Replace with function body.
+
 
 # ----- public methods
 func interaction_e():
+	var metaverse_res_path = internal_object.metaverse_res_path
+	var planet_id = internal_object.planet_id
 	internal_object.request.type = Mapod4dObject.OBJREQ.TO_PLANET
-	internal_object.request.arguments["metaverse_res_path"] = \
-			"res://mapod4d_multiverse_dev/test/test.tscn"
-	internal_object.request.arguments["planet_id"] = internal_object.planet_id
+	internal_object.request.arguments["metaverse_res_path"] = metaverse_res_path
+	internal_object.request.arguments["planet_id"] = planet_id
+
 # ----- private methods
 
 
