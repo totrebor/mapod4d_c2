@@ -18,9 +18,10 @@ extends Object
 
 # ----- enums
 enum MAPOD4D_METAVERSE_LOCATION {
-	M4D_DEV = 0,
+	M4D_DEFAULT = 0,
 	M4D_LOCAL,
 	M4D_NET,
+	M4D_REMOTE,
 }
 
 # ----- constants
@@ -58,15 +59,26 @@ func _ready():
 
 # ----- public methods
 
+func build_user_configuration():
+	if DirAccess.dir_exists_absolute("user://mapod4d_multiverse_remote"):
+		printerr("a")
+	else:
+		DirAccess.make_dir_absolute("user://mapod4d_multiverse_remote")
+		printerr("b")
+	pass
+
+
 func get_multiverse_location(location: MAPOD4D_METAVERSE_LOCATION):
-	var ret_val = "res://mapod4d_multiverse_dev"
+	var ret_val = "res://mapod4d_multiverse"
 	match location:
+		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_DEFAULT:
+			ret_val = "res://mapod4d_multiverse"
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_LOCAL:
 			ret_val = "res://mapod4d_multiverse_local"
-		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_DEV:
-			ret_val = "res://mapod4d_multiverse_dev"
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_NET:
 			ret_val = "res://mapod4d_multiverse_net"
+		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_REMOTE:
+			ret_val = "user://mapod4d_multiverse"
 	return ret_val
 
 
@@ -229,12 +241,34 @@ func get_planet_res_path(metaverse_res_path, planet_id):
 ## read all desktop metaverse for main menu itemlist
 func metaverse_main_menu_list_read(destination: ItemList):
 	var ret_val = false
+	metaverse_main_menu_list_read_single(
+		destination,
+		MAPOD4D_METAVERSE_LOCATION.M4D_DEFAULT,
+		"D"
+	)
+	metaverse_main_menu_list_read_single(
+		destination,
+		MAPOD4D_METAVERSE_LOCATION.M4D_LOCAL,
+		"L"
+	)
+	metaverse_main_menu_list_read_single(
+		destination,
+		MAPOD4D_METAVERSE_LOCATION.M4D_NET,
+		"R"
+	)
+#	AGGIUNGERE REMOTE
+	return ret_val
+
+
+## read single desktop metaverse for main menu itemlist
+func metaverse_main_menu_list_read_single(
+		destination: ItemList, location, metaverse_prefix):
 	var metaverse_info
 	var metaverse_string
 	_metaverse_list.clear()
-	metaverse_list_load(MAPOD4D_METAVERSE_LOCATION.M4D_DEV)
+	metaverse_list_load(location)
 	for element in _metaverse_list:
-		metaverse_string = "D " + element
+		metaverse_string = metaverse_prefix + " " + element
 		metaverse_info =  metaverse_info_read_by_id(element)
 		if metaverse_info.ret_val == true:
 			metaverse_string += " V " + str(metaverse_info.resource.v1)
@@ -243,7 +277,7 @@ func metaverse_main_menu_list_read(destination: ItemList):
 			metaverse_string += "." + str(metaverse_info.resource.v4)
 		var index = destination.add_item(metaverse_string)
 		metaverse_info = {
-			"location": MAPOD4D_METAVERSE_LOCATION.M4D_DEV,
+			"location": MAPOD4D_METAVERSE_LOCATION.M4D_DEFAULT,
 			"id": element,
 			"v1": metaverse_info.resource.v1,
 			"v2": metaverse_info.resource.v2,

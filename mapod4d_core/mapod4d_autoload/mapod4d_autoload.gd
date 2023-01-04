@@ -110,7 +110,7 @@ func mapod4d_print(value):
 		if _prog_debug > 99:
 			_prog_debug = 0
 		print(str(_prog_debug) + " " + str(value))
-		print(str(_prog_debug) + " " + str(get_stack()[1]))
+		print(str(_prog_debug) + " " + str(get_stack()))
 	
 
 # ----- private methods
@@ -334,6 +334,8 @@ func _on_m4d_scene_npb_requested(scene_res_path, fullscreen_flag):
 			# load scene
 			if _load_npb_scene(scene_res_path) == true:
 				_attach_current_loaded_scene_signals()
+	else:
+		mapod4d_print("not found " + scene_res_path)
 
 
 ## elaborates signal load new scene 
@@ -353,6 +355,8 @@ func _on_m4d_scene_requested(scene_res_path, fullscreen_flag):
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 			# load scene deferred
 			_start_load_scene(scene_res_path)
+	else:
+		mapod4d_print("not found " + scene_res_path)
 
 
 ## elaborates signal load new metaverse 
@@ -371,6 +375,9 @@ func _on_m4d_metaverse_requested(metaverse_res_path, fullscreen_flag):
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 			# load scene deferred
 			_start_load_scene(metaverse_res_path)
+	else:
+		mapod4d_print("not found " + metaverse_res_path)
+
 
 ## elaborates signal load new metaverse 
 ## with the progressbar and the fullscreen flag
@@ -390,3 +397,6 @@ func _on_m4d_planet_requested(
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 			_start_load_scene(planet_res_path)
+	else:
+		mapod4d_print("not found " + planet_res_path)
+

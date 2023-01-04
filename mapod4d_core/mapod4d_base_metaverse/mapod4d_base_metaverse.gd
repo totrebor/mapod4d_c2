@@ -30,7 +30,7 @@ const planet_sphere_res = preload(
 # ----- exported variables
 
 # ----- public variables
-var location = Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_DEV
+var location = Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_DEFAULT
 
 # ----- private variables
 var _list_of_planets = null

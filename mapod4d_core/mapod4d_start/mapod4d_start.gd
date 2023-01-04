@@ -24,6 +24,7 @@ extends Mapod4dBaseUi
 # ----- public variables
 
 # ----- private variables
+var _utils = Mapod4dUtils.new()
 
 # ----- onready variables
 @onready var start_button = $AspectRatioContainer/PanelContainer/CenterContainer/Start
@@ -35,6 +36,9 @@ extends Mapod4dBaseUi
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	start_button.pressed.connect(_on_start_button_pressed)
+	## build user configuration
+	_utils.build_user_configuration()
+	
 
 
 # ----- remaining built-in virtual methods
