@@ -187,7 +187,7 @@ func _standard_start():
 ## _current_loaded_scene updated
 func _load_npb_scene(scene_path):
 	var ret_val = false
-	if FileAccess.file_exists(scene_path):
+	if ResourceLoader.exists(scene_path):
 		var scene_res = load(scene_path)
 		if scene_res != null:
 			var scene = scene_res.instantiate()
@@ -239,11 +239,11 @@ func _end_loading_progress_bar():
 
 
 ## call to start load scene with progressbar and update
-func _start_load_scene(scene_path):
-	if FileAccess.file_exists(scene_path):
-		_loading_scene_res_path = scene_path
+func _start_load_scene(scene_res_path):
+	if ResourceLoader.exists(scene_res_path):
+		_loading_scene_res_path = scene_res_path
 		if _start_loading_progress_bar() == false:
-			print_debug("ERROR _start_load_scene " + scene_path)
+			printerr("ERROR _start_load_scene " + scene_res_path)
 
 
 ## called from _process
@@ -321,7 +321,7 @@ func _add_mapod():
 func _on_m4d_scene_npb_requested(scene_res_path, fullscreen_flag):
 	mapod4d_print("_on_scene_npd_requested " + \
 			scene_res_path + " " + str(fullscreen_flag))
-	if FileAccess.file_exists(scene_res_path):
+	if ResourceLoader.exists(scene_res_path):
 		_current_metaverse_res_path = ""
 		_current_planet_name = ""
 		if _mapod4d_run_status == MAPOD4D_RUN_STATUS.F6:
@@ -343,17 +343,18 @@ func _on_m4d_scene_npb_requested(scene_res_path, fullscreen_flag):
 func _on_m4d_scene_requested(scene_res_path, fullscreen_flag):
 	mapod4d_print("_on_scene_requested " + \
 			scene_res_path + " " + str(fullscreen_flag))
-	if FileAccess.file_exists(scene_res_path):
+	if ResourceLoader.exists(scene_res_path):
 		_current_metaverse_res_path = ""
 		_current_planet_name = ""
 		if _mapod4d_run_status == MAPOD4D_RUN_STATUS.F6:
-			pass
+			mapod4d_print("_on_scene_requested F6")
 		else:
 			_current_loaded_scene.queue_free()
 			if fullscreen_flag == true:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 			# load scene deferred
+			mapod4d_print("_on_scene_requested start load")
 			_start_load_scene(scene_res_path)
 	else:
 		mapod4d_print("not found " + scene_res_path)
@@ -362,7 +363,7 @@ func _on_m4d_scene_requested(scene_res_path, fullscreen_flag):
 ## elaborates signal load new metaverse 
 ## with the progressbar and the fullscreen flag
 func _on_m4d_metaverse_requested(metaverse_res_path, fullscreen_flag):
-	if FileAccess.file_exists(metaverse_res_path):
+	if ResourceLoader.exists(metaverse_res_path):
 		_current_metaverse_res_path = metaverse_res_path
 		_current_planet_name = ""
 		mapod4d_print(_current_metaverse_res_path.get_base_dir())
@@ -386,7 +387,7 @@ func _on_m4d_planet_requested(
 	var planet_res_path = _utils.get_planet_res_path(
 		metaverse_res_path, planet_id
 	)
-	if FileAccess.file_exists(planet_res_path):
+	if ResourceLoader.exists(planet_res_path):
 		_current_metaverse_res_path = metaverse_res_path
 		_current_planet_name = planet_id
 		if _mapod4d_run_status == MAPOD4D_RUN_STATUS.F6:

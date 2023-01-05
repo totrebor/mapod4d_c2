@@ -116,20 +116,11 @@ func metaverse_list_load(location: MAPOD4D_METAVERSE_LOCATION):
 	if dir != null:
 		var list_dir = dir.get_directories()
 		for directory_name in list_dir:
-			if dir.file_exists(_current_location + "/" + 
+#			if dir.file_exists(_current_location + "/" + 
+#					directory_name + "/" + directory_name + ".ma4d"):
+			if ResourceLoader.exists(_current_location + "/" + 
 					directory_name + "/" + directory_name + ".ma4d"):
 				_metaverse_list.push_front(directory_name)
-#		## dir exists
-#		var list_files = dir.get_files()
-#		for file_name in list_files:
-#			if file_name.ends_with("." + MAPOD4D_METAVERSE_EXT):
-#				var file = FileAccess.open(
-#					current_location + "/" + file_name, FileAccess.READ)
-#				if file != null:
-#					_json_check(file)
-#					file = null
-#				else:
-#					print("FILEERROR")
 	else:
 		printerr("%s" % str(DirAccess.get_open_error()))
 
@@ -193,12 +184,12 @@ func metaverse_scaffold(
 	return ret_val
 
 
-func metaverse_info_read_by_id(metaverse_id):
+func metaverse_res_info_read_by_id(metaverse_id):
 	set_current_metaverse_paths(metaverse_id)
-	return metaverse_info_read(_metaverse_data_path)
+	return metaverse_res_info_read(_metaverse_data_path)
 
 
-func metaverse_info_read(source_file):
+func metaverse_json_info_read(source_file):
 	var ret_val = false
 	var resource = Mapod4dMa4dRes.new()
 	var file = FileAccess.open(source_file, FileAccess.READ)
@@ -219,6 +210,20 @@ func metaverse_info_read(source_file):
 		"ret_val": ret_val,
 		"resource": resource
 	}
+
+
+func metaverse_res_info_read(metaverse_res_path):
+	var ret_val = {
+		"ret_val": false,
+		"resource": null
+	}
+	var metaverse_res = load(metaverse_res_path)
+	if metaverse_res != null:
+		ret_val.ret_val = true
+		ret_val.resource = metaverse_res
+	else:
+		printerr("can not load " + metaverse_res_path)
+	return ret_val
 
 
 ## build scaffold structure for planet
@@ -269,7 +274,7 @@ func metaverse_main_menu_list_read_single(
 	metaverse_list_load(location)
 	for element in _metaverse_list:
 		metaverse_string = metaverse_prefix + " " + element
-		metaverse_info =  metaverse_info_read_by_id(element)
+		metaverse_info =  metaverse_res_info_read_by_id(element)
 		if metaverse_info.ret_val == true:
 			metaverse_string += " V " + str(metaverse_info.resource.v1)
 			metaverse_string += "." + str(metaverse_info.resource.v2)
