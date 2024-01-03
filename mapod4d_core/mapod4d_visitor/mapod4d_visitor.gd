@@ -70,6 +70,9 @@ enum MAPOD_STATUS {
 # ----- public variables
 
 # ----- private variables
+## global object (singleton)
+var _m_glo = mapod4dAutoload
+
 var _status := MAPOD_STATUS.MPD_QUIET
 ## colliding object with interaction e
 var _int_e_flag := false
@@ -389,26 +392,27 @@ func _elab_joypad():
 func _handle_object_request():
 	pass
 ## TODO da sistemare per capire come dare la location del metaverse
-	#var arguments = _colliding_object.internal_object.request.arguments
-	#match(_colliding_object.internal_object.request.type):
-		#Mapod4dObject.OBJREQ.NONE:
-			#pass
-		#Mapod4dObject.OBJREQ.TO_MAINMENU:
-			#pass
-		#Mapod4dObject.OBJREQ.TO_METAVERSE:
-			#emit_signal(
-				#"m4d_metaverse_requested",
-				#m4d_metaverse_requested,
-				#arguments["metaverse_res_path"],
-				#true
-			#)
-		#Mapod4dObject.OBJREQ.TO_PLANET:
-			#emit_signal(
-				#"m4d_planet_requested",
-				#arguments["metaverse_res_path"],
-				#arguments["planet_id"],
-				#true
-			#)
+	var arguments = _colliding_object.internal_object.request.arguments
+	match(_colliding_object.internal_object.request.type):
+		Mapod4dObject.OBJREQ.NONE:
+			pass
+		Mapod4dObject.OBJREQ.TO_MAINMENU:
+			pass
+		Mapod4dObject.OBJREQ.TO_METAVERSE:
+			emit_signal(
+				"m4d_metaverse_requested",
+				_m_glo.current_metaverse_location(),
+				m4d_metaverse_requested,
+				arguments["metaverse_res_path"],
+				true
+			)
+		Mapod4dObject.OBJREQ.TO_PLANET:
+			emit_signal(
+				"m4d_planet_requested",
+				arguments["metaverse_res_path"],
+				arguments["planet_id"],
+				true
+			)
 
 # ----- public methods
 
