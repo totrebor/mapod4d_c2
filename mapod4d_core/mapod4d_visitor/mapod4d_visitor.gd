@@ -21,7 +21,7 @@ signal m4d_scene_npb_requested(scene_name: String, fullscreen_flag: bool)
 signal m4d_scene_requested(scene_name: String, fullscreen_flag: bool)
 ## request metaverse whith progressbar
 signal m4d_metaverse_requested(
-	metaverse_res_path: String, fullscreen_flag: bool)
+	location, metaverse_res_path: String, fullscreen_flag: bool)
 ## request planet whith progressbar
 signal m4d_planet_requested(
 		metaverse_res_path: String, planet_id: String, fullscreen_flag: bool)
@@ -387,25 +387,28 @@ func _elab_joypad():
 	pass
 
 func _handle_object_request():
-	var arguments = _colliding_object.internal_object.request.arguments
-	match(_colliding_object.internal_object.request.type):
-		Mapod4dObject.OBJREQ.NONE:
-			pass
-		Mapod4dObject.OBJREQ.TO_MAINMENU:
-			pass
-		Mapod4dObject.OBJREQ.TO_METAVERSE:
-			emit_signal(
-				"m4d_metaverse_requested",
-				arguments["metaverse_res_path"],
-				true
-			)
-		Mapod4dObject.OBJREQ.TO_PLANET:
-			emit_signal(
-				"m4d_planet_requested",
-				arguments["metaverse_res_path"],
-				arguments["planet_id"],
-				true
-			)
+	pass
+## TODO da sistemare per capire come dare la location del metaverse
+	#var arguments = _colliding_object.internal_object.request.arguments
+	#match(_colliding_object.internal_object.request.type):
+		#Mapod4dObject.OBJREQ.NONE:
+			#pass
+		#Mapod4dObject.OBJREQ.TO_MAINMENU:
+			#pass
+		#Mapod4dObject.OBJREQ.TO_METAVERSE:
+			#emit_signal(
+				#"m4d_metaverse_requested",
+				#m4d_metaverse_requested,
+				#arguments["metaverse_res_path"],
+				#true
+			#)
+		#Mapod4dObject.OBJREQ.TO_PLANET:
+			#emit_signal(
+				#"m4d_planet_requested",
+				#arguments["metaverse_res_path"],
+				#arguments["planet_id"],
+				#true
+			#)
 
 # ----- public methods
 

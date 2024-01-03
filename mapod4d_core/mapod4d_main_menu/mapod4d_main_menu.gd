@@ -24,8 +24,8 @@ extends Mapod4dBaseUi
 # ----- public variables
 
 # ----- private variables
-var _utils = Mapod4dUtils.new()
 var _metaverse_info = {}
+var _m_glo = mapod4dAutoload
 
 # ----- onready variables
 @onready var _button_main_exit = %MainExit
@@ -44,7 +44,7 @@ func _ready():
 			_button_enter_into_metaverse_pressed)
 	_list_of_metaverses.item_selected.connect(
 		_on_list_of_metaverses_selected)
-	_utils.metaverse_main_menu_list_read(_list_of_metaverses)
+	_m_glo.utils.metaverse_main_menu_list_read(_list_of_metaverses)
 	
 
 # ----- remaining built-in virtual methods
@@ -62,14 +62,15 @@ func _on_list_of_metaverses_selected(metaverse_id):
 	_metaverse_info = _list_of_metaverses.get_item_metadata(metaverse_id)
 	print(_metaverse_info.id)
 	_button_enter_into_metaverse.disabled = false
-	
+
 
 func _button_enter_into_metaverse_pressed():
 	print("_button_enter_into_metaverse_pressed")
-	var metaverse_res_path = _utils.get_metaverse_res_path(
+	var metaverse_res_path = _m_glo.utils.get_metaverse_res_path(
 			_metaverse_info.location, _metaverse_info.id)
 	print(metaverse_res_path)
-	emit_signal("m4d_metaverse_requested", metaverse_res_path, true)
+	emit_signal("m4d_metaverse_requested",
+			_metaverse_info.location, metaverse_res_path, true)
 
 
 func _on_button_main_exit_pressed():

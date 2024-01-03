@@ -29,6 +29,9 @@ const MAPOD4D_METAVERSE_EXT = "ma4d"
 const TEMPL_DIR = "res://mapod4d_templates/"
 const TEMPL_METAVERESE = "mapod4d_templ_metaverse.tscn"
 const TEMPL_LIST_OF_PLANET = "mapod4d_templ_list_of_planets.tres"
+const MAPOD4D_MULTIVERSE_PATH = "wk/mapod4d_multiverse"
+const EDITOR_DBG_BASE_PATH = "res://test"
+
 
 # ----- exported variables
 
@@ -36,6 +39,7 @@ const TEMPL_LIST_OF_PLANET = "mapod4d_templ_list_of_planets.tres"
 
 # ----- private variables
 var _current_location = ""
+var _multiverse_path = ""
 var _metaverse_list = []
 var _metaverse_dir = ""
 var _metaverse_scene_path = ""
@@ -51,9 +55,13 @@ var _metaverse_dir_planets = ""
 
 # ----- built-in virtual _ready method
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+func _init():
+	if OS.has_feature('editor'):
+		_multiverse_path = EDITOR_DBG_BASE_PATH
+	else:
+		_multiverse_path = OS.get_executable_path()
+	_multiverse_path += "/" + MAPOD4D_MULTIVERSE_PATH
+	pass
 
 # ----- remaining built-in virtual methods
 
@@ -72,9 +80,9 @@ func get_multiverse_location(location: MAPOD4D_METAVERSE_LOCATION):
 	var ret_val = "res://mapod4d_multiverse"
 	match location:
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_DEFAULT:
-			ret_val = "res://mapod4d_multiverse"
+			ret_val = _multiverse_path
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_LOCAL:
-			ret_val = "res://mapod4d_multiverse_local"
+			ret_val = "res://mapod4d_multiverse"
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_NET:
 			ret_val = "res://mapod4d_multiverse_net"
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_REMOTE:
@@ -97,6 +105,7 @@ func get_metaverse_res_path(
 	_current_location = get_multiverse_location(location)
 	set_current_metaverse_paths(metaverse_id)
 	return _metaverse_scene_path
+
 
 func get_metaverse_element_res_path(
 		location: MAPOD4D_METAVERSE_LOCATION,
@@ -282,7 +291,7 @@ func metaverse_main_menu_list_read_single(
 			metaverse_string += "." + str(metaverse_info.resource.v4)
 		var index = destination.add_item(metaverse_string)
 		metaverse_info = {
-			"location": MAPOD4D_METAVERSE_LOCATION.M4D_DEFAULT,
+			"location": location,
 			"id": element,
 			"v1": metaverse_info.resource.v1,
 			"v2": metaverse_info.resource.v2,

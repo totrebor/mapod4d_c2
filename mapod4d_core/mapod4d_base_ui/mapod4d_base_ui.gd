@@ -21,6 +21,7 @@ signal m4d_scene_npb_requested(scene_name: String, fullscreen_flag: bool)
 signal m4d_scene_requested(scene_name: String, fullscreen_flag: bool)
 ## request metaverse whith progressbar
 signal m4d_metaverse_requested(
+		location :Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION, 
 		metaverse_res_path: String, fullscreen_flag: bool)
 ## request planet whith progressbar
 signal m4d_planet_requested(

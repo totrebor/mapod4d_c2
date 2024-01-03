@@ -24,3 +24,4 @@ data_*/
 !/bin/linux/readme.md
 /bin/test/*
 !/bin/test/readme.md
+/test/core.js

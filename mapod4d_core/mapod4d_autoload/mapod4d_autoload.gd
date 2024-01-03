@@ -68,15 +68,16 @@ const OSWEBNAME = "web"
 # ----- public variables
 var mapod4d_debug = true
 var _prog_debug = 0
+var utils = Mapod4dUtils.new()
 
 # ----- private variables
 var _current_loaded_scene = null
 var _loading_scene_res_path = ""
 var _mapod4d_run_status = MAPOD4D_RUN_STATUS.STANDARD
 var _progress = [ 0.0 ]
+var _current_metaverse_location = utils.MAPOD4D_METAVERSE_LOCATION.M4D_DEFAULT
 var _current_metaverse_res_path = ""
 var _current_planet_name = ""
-var _utils = Mapod4dUtils.new()
 
 # ----- onready variables
 @onready var _mapod4d_main_res = preload(MAPOD4D_MAIN_RES)
@@ -95,15 +96,15 @@ func _ready():
 	var args = OS.get_cmdline_user_args()
 	# standard parameter
 	if "-m4dver" in args:
-		if _utils != null:
-			_utils.free()
+		if utils != null:
+			utils.free()
 		# BUG Leaked instance: SceneTreeTimer
 		get_tree().quit()
 	# prevent manually run
 	if "-m4drun" not in args: 
 		_write_version(false)
-		if _utils != null:
-			_utils.free()
+		if utils != null:
+			utils.free()
 		# BUG Leaked instance: SceneTreeTimer
 		get_tree().quit()
 	if OS.get_name() != OSWEBNAME:
@@ -167,7 +168,12 @@ func mapod4d_print(value):
 			_prog_debug = 0
 		print(str(_prog_debug) + " " + str(value))
 		print(str(_prog_debug) + " " + str(get_stack()))
-	
+
+
+## return current metaverse location
+func current_metaverse_location():
+	return _current_metaverse_location
+
 
 # ----- private methods
 ## write json version file
@@ -433,8 +439,9 @@ func _on_m4d_scene_requested(scene_res_path, fullscreen_flag):
 
 ## elaborates signal load new metaverse 
 ## with the progressbar and the fullscreen flag
-func _on_m4d_metaverse_requested(metaverse_res_path, fullscreen_flag):
+func _on_m4d_metaverse_requested(location, metaverse_res_path, fullscreen_flag):
 	if ResourceLoader.exists(metaverse_res_path):
+		_current_metaverse_location = location
 		_current_metaverse_res_path = metaverse_res_path
 		_current_planet_name = ""
 		mapod4d_print(_current_metaverse_res_path.get_base_dir())
@@ -455,7 +462,7 @@ func _on_m4d_metaverse_requested(metaverse_res_path, fullscreen_flag):
 ## with the progressbar and the fullscreen flag
 func _on_m4d_planet_requested(
 		metaverse_res_path: String, planet_id: String, fullscreen_flag):
-	var planet_res_path = _utils.get_planet_res_path(
+	var planet_res_path = utils.get_planet_res_path(
 		metaverse_res_path, planet_id
 	)
 	if ResourceLoader.exists(planet_res_path):

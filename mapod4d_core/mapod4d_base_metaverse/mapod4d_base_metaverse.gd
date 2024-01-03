@@ -37,8 +37,8 @@ var _list_of_planets = null
 var _metaverse_id = null
 
 # ----- onready variables
-@onready var _utils = Mapod4dUtils.new()
-
+#@onready var _utils = Mapod4dUtils.new()
+var _m_glo = mapod4dAutoload
 
 # ----- optional built-in virtual _init method
 
@@ -47,8 +47,9 @@ var _metaverse_id = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	location = mapod4dAutoload.current_metaverse_location()
 	_metaverse_id = str(name).to_lower()
-	var list_of_planets_path = _utils.get_metaverse_element_res_path(
+	var list_of_planets_path = _m_glo.utils.get_metaverse_element_res_path(
 			location, _metaverse_id, "list_of_planets.tres"
 	)
 	_list_of_planets = load(list_of_planets_path)
@@ -63,7 +64,8 @@ func _ready():
 				var planet = planet_sphere_res.instantiate()
 				planet.internal_object.planet_id = planet_data.id
 				planet.internal_object.metaverse_res_path = \
-						_utils.get_metaverse_res_path(location, _metaverse_id)
+						_m_glo.utils.get_metaverse_res_path(
+									location, _metaverse_id)
 				planet.set_name(planet_data.id)
 				planet.set_position(Vector3(x_pos, 0, z_pos))
 				z_pos = z_pos - (1.5 + (1.0 / (1.0 + x_pos)))
