@@ -19,9 +19,10 @@ extends Object
 # ----- enums
 enum MAPOD4D_METAVERSE_LOCATION {
 	M4D_DEFAULT = 0,
-	M4D_LOCAL,
-	M4D_NET,
-	M4D_REMOTE,
+	M4D_LOCAL = 1,
+	M4D_NET = 2,
+	M4D_REMOTE = 3,
+	M4D_PCK = 4,
 }
 
 # ----- constants
@@ -30,6 +31,7 @@ const TEMPL_DIR = "res://mapod4d_templates/"
 const TEMPL_METAVERESE = "mapod4d_templ_metaverse.tscn"
 const TEMPL_LIST_OF_PLANET = "mapod4d_templ_list_of_planets.tres"
 const MAPOD4D_MULTIVERSE_PATH = "wk/mapod4d_multiverse"
+const MAPOD4D_MULTIVERSE_PCK_PATH = "wk/mapod4d_multiverse_pck"
 const EDITOR_DBG_BASE_PATH = "res://test"
 
 
@@ -48,6 +50,10 @@ var _metaverse_dir_assets = ""
 var _metaverse_dir_tamt = ""
 var _metaverse_dir_planets = ""
 
+var _multiverse_pck_path = ""
+
+
+
 # ----- onready variables
 
 
@@ -58,10 +64,12 @@ var _metaverse_dir_planets = ""
 func _init():
 	if OS.has_feature('editor'):
 		_multiverse_path = EDITOR_DBG_BASE_PATH
+		_multiverse_pck_path = EDITOR_DBG_BASE_PATH
 	else:
 		_multiverse_path = OS.get_executable_path()
 	_multiverse_path += "/" + MAPOD4D_MULTIVERSE_PATH
-	pass
+	_multiverse_pck_path += "/" + MAPOD4D_MULTIVERSE_PCK_PATH
+
 
 # ----- remaining built-in virtual methods
 
@@ -87,6 +95,8 @@ func get_multiverse_location(location: MAPOD4D_METAVERSE_LOCATION):
 			ret_val = "res://mapod4d_multiverse_net"
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_REMOTE:
 			ret_val = "user://mapod4d_multiverse"
+		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_PCK:
+			ret_val = _multiverse_pck_path
 	return ret_val
 
 
@@ -269,6 +279,11 @@ func metaverse_main_menu_list_read(destination: ItemList):
 		destination,
 		MAPOD4D_METAVERSE_LOCATION.M4D_NET,
 		"R"
+	)
+	metaverse_main_menu_list_read_single(
+		destination,
+		MAPOD4D_METAVERSE_LOCATION.M4D_PCK,
+		"P"
 	)
 #	AGGIUNGERE REMOTE
 	return ret_val

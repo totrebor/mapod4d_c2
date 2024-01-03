@@ -25,3 +25,5 @@ data_*/
 /bin/test/*
 !/bin/test/readme.md
 /test/core.js
+/test/wk/mapod4d_multiverse_pck/*
+!/test/wk/mapod4d_multiverse_pck/tag
