@@ -107,8 +107,8 @@ var _colliding_object = null
 	"interaction_e" = false,
 	"interaction_r" = false
 }
-@onready var _joypad_values = {
-}
+#@onready var _joypad_values = {
+#}
 
 # ----- optional built-in virtual _init method
 

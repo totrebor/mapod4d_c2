@@ -27,7 +27,7 @@ const MAPOD4D_LOADED_SCENE_NODE_TAG = "LoadedScene"
 const EDITOR_DBG_BASE_PATH = "res://test"
 
 const M4DVERSION = {
-	'v1': 0, 
+	'v1': 2, 
 	'v2': 0,
 	'v3': 0,
 	'v4': 1,
@@ -41,6 +41,26 @@ const M4DVERSION = {
 	}
 }
 const M4DNAME = "core"
+
+# default 0 version of M4D
+const M4D0VERSION = {
+	'v1': 0, 
+	'v2': 0,
+	'v3': 0,
+	'v4': 0,
+	'p': "a",
+	'godot': {
+		'v1': 4,
+		'v2': 2,
+		'v3': 1,
+		'v4': 2, # dev = 0, rc = 1, stable = 2
+		'p': "stable"
+	}
+}
+
+
+## global constant
+const OSWEBNAME = "web"
 
 
 # ----- exported variables
@@ -73,20 +93,24 @@ var _utils = Mapod4dUtils.new()
 func _ready():
 	set_process(false)
 	var args = OS.get_cmdline_user_args()
-	# print(args)
+	# standard parameter
 	if "-m4dver" in args:
-		_write_version()
 		if _utils != null:
 			_utils.free()
 		# BUG Leaked instance: SceneTreeTimer
 		get_tree().quit()
 	# prevent manually run
 	if "-m4drun" not in args: 
-		_write_version()
+		_write_version(false)
 		if _utils != null:
 			_utils.free()
 		# BUG Leaked instance: SceneTreeTimer
 		get_tree().quit()
+	if OS.get_name() != OSWEBNAME:
+		if "-m4d0ver" not in args:
+			_write_version(false)
+		else:
+			_write_version(true)
 	if _mapod4d_main == null:
 		## support for F6 in edit mode when MopodMain is Null (not main scene)
 		## force not show intro
@@ -146,9 +170,13 @@ func mapod4d_print(value):
 	
 
 # ----- private methods
-## write version file
-func _write_version():
-		var json_data = JSON.stringify(M4DVERSION)
+## write json version file
+func _write_version(default_version):
+		var json_data
+		if default_version == true:
+			json_data = JSON.stringify(M4D0VERSION)
+		else:
+			json_data = JSON.stringify(M4DVERSION)
 		var base_dir = OS.get_executable_path().get_base_dir()
 		if OS.has_feature('editor'):
 			base_dir = EDITOR_DBG_BASE_PATH
