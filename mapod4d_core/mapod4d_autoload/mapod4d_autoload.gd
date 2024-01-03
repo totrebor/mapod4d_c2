@@ -24,6 +24,23 @@ const MAPOD4D_VISITOR = "res://mapod4d_core/mapod4d_visitor/mapod4d_visitor.tscn
 const MAPOD4D_START = "res://mapod4d_core/mapod4d_start/mapod4d_start.tscn"
 const MAPOD4D_ROOT = "/root/Mapod4dMain"
 const MAPOD4D_LOADED_SCENE_NODE_TAG = "LoadedScene"
+const EDITOR_DBG_BASE_PATH = "res://test"
+
+const M4DVERSION = {
+	'v1': 0, 
+	'v2': 0,
+	'v3': 0,
+	'v4': 1,
+	'p': "a",
+	'godot': {
+		'v1': 4,
+		'v2': 2,
+		'v3': 1,
+		'v4': 2, # dev = 0, rc = 1, stable = 2
+		'p': "stable"
+	}
+}
+const M4DNAME = "core"
 
 
 # ----- exported variables
@@ -55,6 +72,21 @@ var _utils = Mapod4dUtils.new()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_process(false)
+	var args = OS.get_cmdline_user_args()
+	# print(args)
+	if "-m4dver" in args:
+		_write_version()
+		if _utils != null:
+			_utils.free()
+		# BUG Leaked instance: SceneTreeTimer
+		get_tree().quit()
+	# prevent manually run
+	if "-m4drun" not in args: 
+		_write_version()
+		if _utils != null:
+			_utils.free()
+		# BUG Leaked instance: SceneTreeTimer
+		get_tree().quit()
 	if _mapod4d_main == null:
 		## support for F6 in edit mode when MopodMain is Null (not main scene)
 		## force not show intro
@@ -114,6 +146,17 @@ func mapod4d_print(value):
 	
 
 # ----- private methods
+## write version file
+func _write_version():
+		var json_data = JSON.stringify(M4DVERSION)
+		var base_dir = OS.get_executable_path().get_base_dir()
+		if OS.has_feature('editor'):
+			base_dir = EDITOR_DBG_BASE_PATH
+		var file_name = base_dir + "/" + M4DNAME + ".json"
+		var file = FileAccess.open(file_name, FileAccess.WRITE)
+		if file != null:
+			file.store_string(json_data)
+			file.flush()
 
 ## load Mapod4dMain and return the instance
 ## F6 operation
@@ -167,9 +210,9 @@ func _standard_start():
 	await get_tree().create_timer(0.5).timeout
 	_current_loaded_scene = _start_scene_res.instantiate()
 	var screen_size = DisplayServer.screen_get_size()
-	@warning_ignore(integer_division)
+	@warning_ignore("integer_division")
 	var x_position = floor(screen_size.x / 2) - floor(1024 / 2)
-	@warning_ignore(integer_division)
+	@warning_ignore("integer_division")
 	var y_position = floor(screen_size.y / 2) - floor(768 / 2)
 	if x_position < 0:
 		x_position = 0

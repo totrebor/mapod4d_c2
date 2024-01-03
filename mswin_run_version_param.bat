@@ -1,0 +1,1 @@
+bin\win64\corev2,exe --verbose ++ -m4dver
