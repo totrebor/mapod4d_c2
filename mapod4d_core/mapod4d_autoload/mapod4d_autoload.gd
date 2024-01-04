@@ -75,7 +75,9 @@ var _current_loaded_scene = null
 var _loading_scene_res_path = ""
 var _mapod4d_run_status = MAPOD4D_RUN_STATUS.STANDARD
 var _progress = [ 0.0 ]
-var _current_metaverse_location = utils.MAPOD4D_METAVERSE_LOCATION.M4D_DEFAULT
+
+var _current_metaverse_location = utils.MAPOD4D_METAVERSE_LOCATION.M4D_LOCAL
+var _current_metaverse_path = ""
 var _current_metaverse_res_path = ""
 var _current_planet_name = ""
 
@@ -439,7 +441,13 @@ func _on_m4d_scene_requested(scene_res_path, fullscreen_flag):
 
 ## elaborates signal load new metaverse 
 ## with the progressbar and the fullscreen flag
-func _on_m4d_metaverse_requested(location, metaverse_res_path, fullscreen_flag):
+func _on_m4d_metaverse_requested(
+		location, metaverse_id, fullscreen_flag):
+	var metaverse_res_path = utils.get_metaverse_res_path(
+			location, metaverse_id)
+
+	if location == utils.MAPOD4D_METAVERSE_LOCATION.M4D_PCK:
+		utils.load_metaverse_pck(location, metaverse_id)
 	if ResourceLoader.exists(metaverse_res_path):
 		_current_metaverse_location = location
 		_current_metaverse_res_path = metaverse_res_path

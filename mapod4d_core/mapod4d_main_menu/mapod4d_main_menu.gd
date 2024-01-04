@@ -70,7 +70,7 @@ func _button_enter_into_metaverse_pressed():
 			_metaverse_info.location, _metaverse_info.id)
 	print(metaverse_res_path)
 	emit_signal("m4d_metaverse_requested",
-			_metaverse_info.location, metaverse_res_path, true)
+			_metaverse_info.location, _metaverse_info.id, true)
 
 
 func _on_button_main_exit_pressed():

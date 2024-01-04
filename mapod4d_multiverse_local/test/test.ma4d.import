@@ -1,0 +1,14 @@
+[remap]
+
+importer="mapod4d.ma4d"
+type="Mapod4dMa4dRes"
+uid="uid://jufviyuc2bns"
+path="res://.godot/imported/test.ma4d-fc01f353d82114e71cefe33627c65ce6.tres"
+
+[deps]
+
+source_file="res://mapod4d_multiverse_local/test/test.ma4d"
+dest_files=["res://.godot/imported/test.ma4d-fc01f353d82114e71cefe33627c65ce6.tres"]
+
+[params]
+

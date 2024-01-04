@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://dq80u12s3481t"]
+
+[ext_resource type="PackedScene" uid="uid://b1x50m0vogbgt" path="res://mapod4d_core/mapod4d_planet_core/mapod4d_planet_sphere/mapod4d_planet_sphere.tscn" id="1_38bb6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iytw6"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_b1do8"]
+
+[sub_resource type="Sky" id="Sky_d6gff"]
+sky_material = SubResource("PhysicalSkyMaterial_b1do8")
+
+[sub_resource type="Environment" id="Environment_w4pod"]
+background_mode = 2
+sky = SubResource("Sky_d6gff")
+
+[node name="A" instance=ExtResource("1_38bb6")]
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Center" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4724, 0, 0)
+material = SubResource("StandardMaterial3D_iytw6")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Center" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.34344, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="2"]
+environment = SubResource("Environment_w4pod")

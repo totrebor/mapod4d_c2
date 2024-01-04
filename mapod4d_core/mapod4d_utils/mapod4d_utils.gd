@@ -18,11 +18,10 @@ extends Object
 
 # ----- enums
 enum MAPOD4D_METAVERSE_LOCATION {
-	M4D_DEFAULT = 0,
-	M4D_LOCAL = 1,
-	M4D_NET = 2,
-	M4D_REMOTE = 3,
-	M4D_PCK = 4,
+	M4D_LOCAL = 0,
+	M4D_NET = 1,
+	M4D_REMOTE = 2,
+	M4D_PCK = 3,
 }
 
 # ----- constants
@@ -41,7 +40,7 @@ const EDITOR_DBG_BASE_PATH = "res://test"
 
 # ----- private variables
 var _current_location = ""
-var _multiverse_path = ""
+var _current_location_id :MAPOD4D_METAVERSE_LOCATION
 var _metaverse_list = []
 var _metaverse_dir = ""
 var _metaverse_scene_path = ""
@@ -49,8 +48,10 @@ var _metaverse_data_path = ""
 var _metaverse_dir_assets = ""
 var _metaverse_dir_tamt = ""
 var _metaverse_dir_planets = ""
+var _metaverse_pck_path = ""
+var _metaverse_pck_json_path = ""
 
-var _multiverse_pck_path = ""
+var _calculated_multiverse_pck_path = ""
 
 
 
@@ -63,12 +64,11 @@ var _multiverse_pck_path = ""
 
 func _init():
 	if OS.has_feature('editor'):
-		_multiverse_path = EDITOR_DBG_BASE_PATH
-		_multiverse_pck_path = EDITOR_DBG_BASE_PATH
+		##_calculated_multiverse_pck_path = EDITOR_DBG_BASE_PATH
+		_calculated_multiverse_pck_path = "D:/area_sviluppo/000_mapod4d/tests"
 	else:
-		_multiverse_path = OS.get_executable_path()
-	_multiverse_path += "/" + MAPOD4D_MULTIVERSE_PATH
-	_multiverse_pck_path += "/" + MAPOD4D_MULTIVERSE_PCK_PATH
+		_calculated_multiverse_pck_path = OS.get_executable_path().get_base_dir()
+	_calculated_multiverse_pck_path += "/" + MAPOD4D_MULTIVERSE_PCK_PATH
 
 
 # ----- remaining built-in virtual methods
@@ -87,16 +87,14 @@ func build_user_configuration():
 func get_multiverse_location(location: MAPOD4D_METAVERSE_LOCATION):
 	var ret_val = "res://mapod4d_multiverse"
 	match location:
-		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_DEFAULT:
-			ret_val = _multiverse_path
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_LOCAL:
-			ret_val = "res://mapod4d_multiverse"
+			ret_val = "res://mapod4d_multiverse_local"
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_NET:
 			ret_val = "res://mapod4d_multiverse_net"
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_REMOTE:
-			ret_val = "user://mapod4d_multiverse"
+			ret_val = "user://mapod4d_multiverse_remote"
 		Mapod4dUtils.MAPOD4D_METAVERSE_LOCATION.M4D_PCK:
-			ret_val = _multiverse_pck_path
+			ret_val = "res://mapod4d_multiverse"
 	return ret_val
 
 
@@ -108,11 +106,17 @@ func set_current_metaverse_paths(metaverse_id):
 	_metaverse_dir_assets = _metaverse_dir + "/" + "assets"
 	_metaverse_dir_tamt = _metaverse_dir + "/" + "tamt"
 	_metaverse_dir_planets = _metaverse_dir + "/" + "planets"
+	_metaverse_pck_path = _calculated_multiverse_pck_path + "/"
+	_metaverse_pck_path += metaverse_id + "/"
+	_metaverse_pck_path += metaverse_id
+	_metaverse_pck_json_path = _metaverse_pck_path
+	_metaverse_pck_json_path += ".json"
+	_metaverse_pck_path += ".pck"
 
 
 func get_metaverse_res_path(
 		location: MAPOD4D_METAVERSE_LOCATION, metaverse_id: String):
-	_current_location = get_multiverse_location(location)
+	_choose_multiverse_location(location)
 	set_current_metaverse_paths(metaverse_id)
 	return _metaverse_scene_path
 
@@ -120,28 +124,16 @@ func get_metaverse_res_path(
 func get_metaverse_element_res_path(
 		location: MAPOD4D_METAVERSE_LOCATION,
 		metaverse_id: String, element_name: String):
-	_current_location = get_multiverse_location(location)
+	_choose_multiverse_location(location)
 	set_current_metaverse_paths(metaverse_id)
 	var ret_val = _metaverse_dir + "/" + element_name
 	return ret_val
 
-
-## build and load metaverses list
-func metaverse_list_load(location: MAPOD4D_METAVERSE_LOCATION):
-	var dir = null
+func load_metaverse_pck(location, metaverse_id):
 	_choose_multiverse_location(location)
-	dir = DirAccess.open(_current_location)
-
-	if dir != null:
-		var list_dir = dir.get_directories()
-		for directory_name in list_dir:
-#			if dir.file_exists(_current_location + "/" + 
-#					directory_name + "/" + directory_name + ".ma4d"):
-			if ResourceLoader.exists(_current_location + "/" + 
-					directory_name + "/" + directory_name + ".ma4d"):
-				_metaverse_list.push_front(directory_name)
-	else:
-		printerr("%s" % str(DirAccess.get_open_error()))
+	set_current_metaverse_paths(metaverse_id)
+	var retVal = ProjectSettings.load_resource_pack(_metaverse_pck_path)
+	return retVal
 
 
 func metaverse_list_to_item_list(destination: ItemList):
@@ -208,27 +200,27 @@ func metaverse_res_info_read_by_id(metaverse_id):
 	return metaverse_res_info_read(_metaverse_data_path)
 
 
-func metaverse_json_info_read(source_file):
-	var ret_val = false
-	var resource = Mapod4dMa4dRes.new()
-	var file = FileAccess.open(source_file, FileAccess.READ)
-	if file != null:
-		var data = file.get_line()
-		var data_json = JSON.parse_string(data)
-		if data_json != null:
-			resource.id = data_json.id
-			resource.v1 = data_json.v1
-			resource.v2 = data_json.v2
-			resource.v3 = data_json.v3
-			resource.v4 = data_json.v4
-			ret_val = true
-	else:
-		print(FileAccess.get_open_error())
-		print(source_file)
-	return {
-		"ret_val": ret_val,
-		"resource": resource
-	}
+#func metaverse_json_info_read(source_file):
+	#var ret_val = false
+	#var resource = Mapod4dMa4dRes.new()
+	#var file = FileAccess.open(source_file, FileAccess.READ)
+	#if file != null:
+		#var data = file.get_line()
+		#var data_json = JSON.parse_string(data)
+		#if data_json != null:
+			#resource.id = data_json.id
+			#resource.v1 = data_json.v1
+			#resource.v2 = data_json.v2
+			#resource.v3 = data_json.v3
+			#resource.v4 = data_json.v4
+			#ret_val = true
+	#else:
+		#print(FileAccess.get_open_error())
+		#print(source_file)
+	#return {
+		#"ret_val": ret_val,
+		#"resource": resource
+	#}
 
 
 func metaverse_res_info_read(metaverse_res_path):
@@ -236,13 +228,39 @@ func metaverse_res_info_read(metaverse_res_path):
 		"ret_val": false,
 		"resource": null
 	}
-	var metaverse_res = load(metaverse_res_path)
-	if metaverse_res != null:
-		ret_val.ret_val = true
-		ret_val.resource = metaverse_res
+	if _current_location_id == MAPOD4D_METAVERSE_LOCATION.M4D_PCK:
+		pass
 	else:
-		printerr("can not load " + metaverse_res_path)
+		var metaverse_res = load(metaverse_res_path)
+		if metaverse_res != null:
+			ret_val.ret_val = true
+			ret_val.resource = metaverse_res
+		else:
+			printerr("can not load " + metaverse_res_path)
 	return ret_val
+
+func metaverse_pckg_json_info_read(json_file):
+	var ret_val = {
+		"ret_val": false,
+		"resource": null
+	}
+	var resource = Mapod4dMa4dRes.new()
+	var file = FileAccess.open(json_file, FileAccess.READ)
+	if file != null:
+		var data = file.get_as_text(true)
+		var data_json = JSON.parse_string(data)
+		if data_json != null:
+			resource.id = data_json.id
+			resource.v1 = data_json.v1
+			resource.v2 = data_json.v2
+			resource.v3 = data_json.v3
+			resource.v4 = data_json.v4
+			ret_val.ret_val = true
+			ret_val.resource = resource
+	else:
+		print(FileAccess.get_open_error())
+	return ret_val
+
 
 
 ## build scaffold structure for planet
@@ -262,31 +280,37 @@ func get_planet_res_path(metaverse_res_path, planet_id):
 	return planet_res_path
 
 
-## read all desktop metaverse for main menu itemlist
-func metaverse_main_menu_list_read(destination: ItemList):
-	var ret_val = false
-	metaverse_main_menu_list_read_single(
-		destination,
-		MAPOD4D_METAVERSE_LOCATION.M4D_DEFAULT,
-		"D"
-	)
-	metaverse_main_menu_list_read_single(
-		destination,
-		MAPOD4D_METAVERSE_LOCATION.M4D_LOCAL,
-		"L"
-	)
-	metaverse_main_menu_list_read_single(
-		destination,
-		MAPOD4D_METAVERSE_LOCATION.M4D_NET,
-		"R"
-	)
-	metaverse_main_menu_list_read_single(
-		destination,
-		MAPOD4D_METAVERSE_LOCATION.M4D_PCK,
-		"P"
-	)
-#	AGGIUNGERE REMOTE
-	return ret_val
+## build and load metaverses list
+func metaverse_list_load(location: MAPOD4D_METAVERSE_LOCATION):
+	var dir = null
+	_choose_multiverse_location(location)
+	var current_location = _current_location
+	if location == MAPOD4D_METAVERSE_LOCATION.M4D_PCK:
+		current_location = _calculated_multiverse_pck_path
+	
+	dir = DirAccess.open(current_location)
+
+	if dir != null:
+		var list_dir = dir.get_directories()
+		for directory_name in list_dir:
+			if location == MAPOD4D_METAVERSE_LOCATION.M4D_PCK:
+				var file_json_path = current_location + "/"
+				file_json_path += directory_name + "/"
+				file_json_path += directory_name + ".json"
+				var file_pck_path = current_location + "/"
+				file_pck_path += directory_name + "/"
+				file_pck_path += directory_name + ".pck"
+				if dir.file_exists(file_json_path):
+					if dir.file_exists(file_pck_path):
+						_metaverse_list.push_front(directory_name)
+			else:
+				var res_path = current_location + "/" 
+				res_path += directory_name + "/"
+				res_path += directory_name + ".ma4d"
+				if ResourceLoader.exists(res_path):
+					_metaverse_list.push_front(directory_name)
+	else:
+		printerr("%s" % str(DirAccess.get_open_error()))
 
 
 ## read single desktop metaverse for main menu itemlist
@@ -297,8 +321,13 @@ func metaverse_main_menu_list_read_single(
 	_metaverse_list.clear()
 	metaverse_list_load(location)
 	for element in _metaverse_list:
+		if location == MAPOD4D_METAVERSE_LOCATION.M4D_PCK:
+			metaverse_info = metaverse_pckg_json_info_read(
+					_metaverse_pck_json_path)
+		else:
+			metaverse_info = metaverse_res_info_read_by_id(element)
+
 		metaverse_string = metaverse_prefix + " " + element
-		metaverse_info =  metaverse_res_info_read_by_id(element)
 		if metaverse_info.ret_val == true:
 			metaverse_string += " V " + str(metaverse_info.resource.v1)
 			metaverse_string += "." + str(metaverse_info.resource.v2)
@@ -315,10 +344,38 @@ func metaverse_main_menu_list_read_single(
 		}
 		destination.set_item_metadata(index, metaverse_info)
 
+
+## read all desktop metaverse for main menu itemlist
+func metaverse_main_menu_list_read(destination: ItemList):
+	var ret_val = false
+	metaverse_main_menu_list_read_single(
+		destination,
+		MAPOD4D_METAVERSE_LOCATION.M4D_LOCAL,
+		"L"
+	)
+	metaverse_main_menu_list_read_single(
+		destination,
+		MAPOD4D_METAVERSE_LOCATION.M4D_REMOTE,
+		"L"
+	)
+	metaverse_main_menu_list_read_single(
+		destination,
+		MAPOD4D_METAVERSE_LOCATION.M4D_NET,
+		"R"
+	)
+	metaverse_main_menu_list_read_single(
+		destination,
+		MAPOD4D_METAVERSE_LOCATION.M4D_PCK,
+		"P"
+	)
+	return ret_val
+
+
 # ----- private methods
 
 func _choose_multiverse_location(location: MAPOD4D_METAVERSE_LOCATION):
 	var ret_val = true
+	_current_location_id = location
 	_current_location = get_multiverse_location(location)
 	return ret_val
 
@@ -364,35 +421,33 @@ func _save_templ_list_of_planets(
 	return ret_val
 
 
-## check json file
-func _json_check(_file):
-	return true
-#	const RVER = "(?<digit0>[0-9]+)\\.(?<digit1>[0-9]+)\\.(?<digit2>[0-9]+)\\.(?<digit3>[0-9]+)"
-#	var regex = RegEx.new()
-#	regex.compile(RVER)
-#	## file exists
-#	var json = JSON.new()
-#	if json.parse(file.get_as_text()) == OK:
-#		## json ok
-#		print(str(json.data))
-#		var version = regex.search(json.data.version)
-#		if version != null:
-#			## version ok
-#			var data = {}
-#			data["metaversefile"] = json.data.filename + \
-#					"." + json.data.extension
-#			data["core"] = version.get_string("digit0")
-#			data["ver"] = version.get_string("digit1")
-#			data["build"] = version.get_string("digit2")
-#			data["subbuild"] = version.get_string("digit3")
-#			var metaverse_file_exists = FileAccess.file_exists(
-#					"users://metaverse" + "/" + data["metaversefile"])
-#			if metaverse_file_exists == true:
-#				print("OK")
-#				_metaverse_files.push_back(data)
-#			else:
-#				print("METAVERSEERROR")
-#		else:
-#			print("VERSIONERROR")
-#	else:
-#		print("PARSEERROR")
+#func _read_json_pck_info(file):
+	#const RVER = "(?<digit0>[0-9]+)\\.(?<digit1>[0-9]+)\\.(?<digit2>[0-9]+)\\.(?<digit3>[0-9]+)"
+	#var regex = RegEx.new()
+	#regex.compile(RVER)
+	### file exists
+	#var json = JSON.new()
+	#if json.parse(file.get_as_text()) == OK:
+		### json ok
+		#print(str(json.data))
+		#var version = regex.search(json.data.version)
+		#if version != null:
+			### version ok
+			#var data = {}
+			#data["metaversefile"] = json.data.filename + \
+					#"." + json.data.extension
+			#data["core"] = version.get_string("digit0")
+			#data["ver"] = version.get_string("digit1")
+			#data["build"] = version.get_string("digit2")
+			#data["subbuild"] = version.get_string("digit3")
+			#var metaverse_file_exists = FileAccess.file_exists(
+					#"users://metaverse" + "/" + data["metaversefile"])
+			#if metaverse_file_exists == true:
+				#print("OK")
+				#_metaverse_files.push_back(data)
+			#else:
+				#print("METAVERSEERROR")
+		#else:
+			#print("VERSIONERROR")
+	#else:
+		#print("PARSEERROR")
